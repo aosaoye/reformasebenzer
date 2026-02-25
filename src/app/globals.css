@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 28, 25, 23;
+  /* stone-900 */
+  --background-rgb: 253, 253, 252;
+  /* stone-50 */
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+.brand-bg-text {
+  -webkit-text-stroke: 1.5px rgba(28, 25, 23, 0.08);
+  /* stone-900/8% - Very subtle but rich */
+  color: transparent;
+  transition: -webkit-text-stroke 0.5s ease;
+}
+
+.brand-bg-text:hover {
+  -webkit-text-stroke: 1.5px rgba(28, 25, 23, 0.15);
+}

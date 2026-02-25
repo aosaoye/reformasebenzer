@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto | Reformas Ebenzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #fdfdfc;
+      }
+    </style>
+  </head>
+
+  <body class="antialiased text-stone-900">
+    <div
+      class="bg-stone-900 text-stone-100 py-3 text-center text-[10px] uppercase tracking-[0.2em]"
+    >
+      Solicita tu presupuesto gratuito hoy mismo
+    </div>
+    <header
+      class="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md border-stone-100"
+    >
+      <div
+        class="flex items-center justify-between h-20 px-6 mx-auto max-w-7xl"
+      >
+        <button id="mobile-menu-btn" class="p-2 md:hidden text-stone-900">
+          <ion-icon name="menu-outline" class="text-2xl"></ion-icon>
+        </button>
+
+        <h1 class="text-2xl font-semibold tracking-tighter italic">
+          <a href="index.html">Ebenzer</a>
+        </h1>
+
+        <nav class="hidden md:block">
+          <ul
+            class="flex gap-10 text-xs font-semibold tracking-widest uppercase text-stone-500"
+          >
+            <li>
+              <a href="index.html" class="transition hover:text-stone-900"
+                >Inicio</a
+              >
+            </li>
+            <li>
+              <a href="proyectos.html" class="transition hover:text-stone-900"
+                >Proyectos</a
+              >
+            </li>
+            <li>
+              <a href="servicios.html" class="transition hover:text-stone-900"
+                >Servicios</a
+              >
+            </li>
+
+            <li>
+              <a href="contact.html" class="transition text-stone-900 font-bold"
+                >Contacto</a
+              >
+            </li>
+          </ul>
+        </nav>
+
+        <div class="flex items-center justify-center gap-4">
+          <a
+            href="search.html"
+            class="hidden text-xs font-bold uppercase sm:block text-stone-900"
+          >
+            <ion-icon name="search-outline" class="text-3xl"></ion-icon>
+          </a>
+          <a href="#" class="hidden text-xs font-bold uppercase sm:block">
+            <span class="relative flex items-center gap-2"
+              ><ion-icon name="hammer-outline" class="text-3xl"></ion-icon
+            ></span>
+          </a>
+          <a href="#" class="flex items-center text-xs font-bold uppercase">
+            <ion-icon name="person-outline" class="text-3xl"></ion-icon>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="px-6 py-12 mx-auto max-w-7xl">
+      <div class="grid grid-cols-1 gap-16 md:grid-cols-2">
+        <div>
+          <h2 class="mb-6 text-4xl font-bold tracking-tighter">Contáctanos</h2>
+          <p class="mb-12 text-stone-500 leading-relaxed">
+            ¿Tienes un proyecto en mente? Estamos aquí para asesorarte.
+            Cuéntanos qué necesitas y nuestro equipo se pondrá en contacto
+            contigo para una visita técnica sin compromiso.
+          </p>
+
+          <div class="space-y-8">
+            <div class="flex items-start gap-4">
+              <div
+                class="flex items-center justify-center p-3 rounded-full bg-stone-100"
+              >
+                <ion-icon name="location-outline" class="text-xl"></ion-icon>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold tracking-widest uppercase mb-1">
+                  Oficina Central
+                </h3>
+                <p class="text-sm text-stone-500">
+                  Av. de la Innovación 45, 28001 Madrid
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div
+                class="flex items-center justify-center p-3 rounded-full bg-stone-100"
+              >
+                <ion-icon name="mail-outline" class="text-xl"></ion-icon>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold tracking-widest uppercase mb-1">
+                  Email
+                </h3>
+                <p class="text-sm text-stone-500">info@reformasebenzer.com</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div
+                class="flex items-center justify-center p-3 rounded-full bg-stone-100"
+              >
+                <ion-icon name="call-outline" class="text-xl"></ion-icon>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold tracking-widest uppercase mb-1">
+                  Teléfono
+                </h3>
+                <p class="text-sm text-stone-500">+34 600 000 000</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="p-8 bg-white border rounded-2xl border-stone-100 shadow-xl shadow-stone-100/50"
+        >
+          <form class="relative mx-auto max-w group space-y-6">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div>
+                <label
+                  class="block text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-1"
+                  >Nombre</label
+                >
+                <input
+                  type="text"
+                  placeholder="Tu nombre"
+                  class="w-full py-4 text-xs font-medium bg-transparent border-b border-stone-200 focus:outline-none focus:border-stone-900 transition-colors"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-1"
+                  >Teléfono</label
+                >
+                <input
+                  type="text"
+                  placeholder="Tu teléfono"
+                  class="w-full py-4 text-xs font-medium bg-transparent border-b border-stone-200 focus:outline-none focus:border-stone-900 transition-colors"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                class="block text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-1"
+                >Email</label
+              >
+              <input
+                type="email"
+                placeholder="Tu correo electrónico"
+                class="w-full py-4 text-xs font-medium bg-transparent border-b border-stone-200 focus:outline-none focus:border-stone-900 transition-colors"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-1"
+                >Tipo de Proyecto</label
+              >
+              <select
+                class="w-full py-4 text-xs font-medium bg-transparent border-b border-stone-200 focus:outline-none focus:border-stone-900 transition-colors appearance-none"
+              >
+                <option>Reforma Integral</option>
+                <option>Reforma de Cocina</option>
+                <option>Reforma de Baño</option>
+                <option>Otros</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-1"
+                >Mensaje</label
+              >
+              <textarea
+                rows="4"
+                class="w-full py-4 text-xs font-medium bg-transparent border-b border-stone-200 focus:outline-none focus:border-stone-900 transition-colors"
+                placeholder="Cuéntanos un poco más sobre tu idea..."
+              ></textarea>
+            </div>
+            <button
+              class="w-full py-5 text-xs font-bold tracking-widest text-white uppercase transition rounded-full bg-stone-900 hover:bg-stone-800 shadow-lg"
+            >
+              Enviar Solicitud
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative pt-24 pb-12 overflow-hidden bg-stone-100">
+      <div class="relative z-10 px-6 mx-auto max-w-7xl">
+        <div class="grid grid-cols-12 mb-24 gap-y-12 md:gap-x-12">
+          <div class="col-span-12 lg:col-span-5">
+            <h2 class="mb-6 text-4xl font-bold leading-none tracking-tighter">
+              Solicita tu presupuesto personal <br />y haz realidad tu proyecto
+            </h2>
+            <p class="max-w-sm mb-8 text-sm text-stone-500">
+              Estamos aquí para asesorarte en cada paso de tu reforma. Cuéntanos
+              tu idea y nuestro equipo de expertos la hará posible con las
+              mejores soluciones.
+            </p>
+          </div>
+
+          <div class="col-span-12 lg:col-span-7">
+            <div class="grid grid-cols-2 gap-8 text-left md:grid-cols-4">
+              <div class="flex flex-col gap-6">
+                <h4 class="text-lg font-bold tracking-tight">Contacto</h4>
+                <ul class="space-y-4 text-sm font-medium text-stone-500">
+                  <li>info@reformasebenzer.com</li>
+                  <li>+34 600 000 000</li>
+                  <li>Av. de la Innovación 45, Madrid</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row justify-between items-center border-t border-stone-200 pt-8 text-[10px] text-stone-400 uppercase tracking-widest"
+        >
+          <p>© 2026 Reformas Ebenzer. Todos los derechos reservados.</p>
+          <div class="flex gap-8 mt-4 md:mt-0">
+            <a href="#" class="transition hover:text-stone-900"
+              >Política de Privacidad</a
+            >
+            <a href="#" class="transition hover:text-stone-900">Aviso Legal</a>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none select-none translate-y-1/4"
+      >
+        <span
+          class="brand-bg-text text-[25vw] font-black text-stone-200/50 leading-none block whitespace-nowrap tracking-tighter"
+        >
+          EBENZER
+        </span>
+      </div>
+    </footer>
+
+    <!-- Mobile Drawer -->
+    <div
+      id="mobile-drawer"
+      class="fixed inset-0 z-[100] transform -translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div
+        id="drawer-overlay"
+        class="absolute inset-0 transition-opacity duration-300 opacity-0 pointer-events-none bg-black/50"
+      ></div>
+      <div class="relative flex flex-col w-64 h-full p-6 bg-white shadow-xl">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="text-xl font-bold tracking-tighter">EBENZER</h2>
+          <button
+            id="close-drawer-btn"
+            class="p-2 text-stone-500 hover:text-stone-900"
+          >
+            <ion-icon name="close-outline" class="text-2xl"></ion-icon>
+          </button>
+        </div>
+        <nav>
+          <ul
+            class="flex flex-col justify-center text-sm font-semibold tracking-widest uppercase text-stone-500"
+          >
+            <li>
+              <a
+                href="index.html"
+                class="block py-4 transition border-b hover:text-stone-900 border-stone-100"
+                >Inicio</a
+              >
+            </li>
+            <li>
+              <a
+                href="proyectos.html"
+                class="block py-4 transition border-b hover:text-stone-900 border-stone-100"
+                >Proyectos</a
+              >
+            </li>
+            <li>
+              <a
+                href="servicios.html"
+                class="block py-4 transition border-b hover:text-stone-900 border-stone-100"
+                >Servicios</a
+              >
+            </li>
+
+            <li>
+              <a
+                href="contact.html"
+                class="block py-4 transition border-b hover:text-stone-900 border-stone-100"
+                >Contacto</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
+</html>
