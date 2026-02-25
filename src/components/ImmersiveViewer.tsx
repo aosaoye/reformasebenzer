@@ -139,7 +139,7 @@ export default function ImmersiveViewer({ imageUrl, originalUrl, onClose }: { im
                     )}
                 </AnimatePresence>
 
-                <Canvas camera={{ position: [0, 0, 0.1], fov: 65 }} dpr={[1, 2]}>
+                <Canvas camera={{ position: [0, 0, 0.1], fov: 45 }} dpr={[1, 2]}>
                     <Suspense fallback={null}>
                         <Scene textureUrl={imageUrl} originalUrl={originalUrl} mode={mode} />
                     </Suspense>
@@ -156,9 +156,9 @@ export default function ImmersiveViewer({ imageUrl, originalUrl, onClose }: { im
                         <svg className="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
                         </svg>
-                        <span className="text-[9px] font-black uppercase tracking-[0.3em]">Arrastra para explorar</span>
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em]">Girar para explorar</span>
                         <div className="w-[1px] h-4 bg-white/20"></div>
-                        <span className="text-[9px] font-black uppercase tracking-[0.3em]">Zoom con rueda</span>
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em]">Pellizca o rueda para Zoom</span>
                     </motion.div>
                 </div>
             </div>
