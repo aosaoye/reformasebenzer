@@ -20,7 +20,7 @@ export default function WhatsAppButton() {
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                    href="https://wa.me/34600000000?text=Hola,%20estoy%20interesado%20en%20solicitar%20un%20presupuesto%20para%20una%20reforma."
+                    href="https://wa.me/34643640502?text=Hola,%20estoy%20interesado%20en%20solicitar%20un%20presupuesto%20para%20una%20reforma."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="fixed bottom-8 right-8 z-[9999] group"

@@ -66,8 +66,8 @@ export default function Footer() {
                             </div>
                             <div className="flex flex-col gap-6">
                                 <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400">Teléfono</h4>
-                                <a href="tel:+34600000000" className="text-xl font-medium text-stone-900 transition hover:opacity-50 underline underline-offset-[12px] decoration-stone-200">
-                                    +34 600 000 000
+                                <a href="tel:+34643640502" className="text-xl font-medium text-stone-900 transition hover:opacity-50 underline underline-offset-[12px] decoration-stone-200">
+                                    +34 643 640 502
                                 </a>
                             </div>
                         </div>
