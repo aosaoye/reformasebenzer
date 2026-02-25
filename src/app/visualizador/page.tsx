@@ -9,7 +9,12 @@ const ImmersiveViewer = dynamic(() => import("@/components/ImmersiveViewer"), {
     loading: () => <div className="fixed inset-0 bg-stone-900 z-[500] flex items-center justify-center text-white text-[10px] font-bold uppercase tracking-widest animate-pulse">Iniciando Motor 3D...</div>
 });
 
-type Step = "upload" | "processing" | "choice" | "viewer" | "studio";
+const ModelViewer = dynamic(() => import("@/components/ModelViewer"), {
+    ssr: false,
+    loading: () => <div className="fixed inset-0 bg-stone-950 flex items-center justify-center text-white text-xs font-bold uppercase tracking-widest animate-pulse">Cargando Catálogo 3D...</div>
+});
+
+type Step = "upload" | "processing" | "choice" | "viewer" | "studio" | "showroom";
 
 export default function VisualizerPage() {
     const [step, setStep] = useState<Step>("upload");
@@ -44,7 +49,7 @@ export default function VisualizerPage() {
 
     return (
         <main className="min-h-screen bg-stone-50 py-12 px-6 flex items-center justify-center overflow-hidden">
-            <div className="w-full max-w-4xl">
+            <div className="w-full max-w-6xl">
                 <AnimatePresence mode="wait">
                     {step === "upload" && (
                         <motion.div
@@ -52,7 +57,7 @@ export default function VisualizerPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="text-center"
+                            className="text-center max-w-4xl mx-auto"
                         >
                             <header className="mb-20">
                                 <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-stone-400 mb-6 block">Ebenzer Immersive Engine</span>
@@ -107,32 +112,45 @@ export default function VisualizerPage() {
                             key="choice"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center"
+                            className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center"
                         >
                             <button
                                 onClick={() => setStep("viewer")}
-                                className="flex flex-col items-center p-12 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all border-2 border-transparent hover:border-stone-900 group"
+                                className="flex flex-col items-center p-10 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all border-2 border-transparent hover:border-stone-900 group"
                             >
-                                <div className="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-4">Visor Inmersivo 360°</h3>
-                                <p className="text-stone-500 text-sm font-light">Explora el resultado final en una vista panorámica envolvente.</p>
+                                <h3 className="text-xl font-bold mb-3 uppercase tracking-tighter">Visor 360°</h3>
+                                <p className="text-stone-500 text-xs font-light leading-relaxed">Recorrido inmersivo por toda la vivienda estilo Idealista.</p>
                             </button>
 
                             <button
                                 onClick={() => setStep("studio")}
-                                className="flex flex-col items-center p-12 bg-stone-900 text-white rounded-3xl shadow-xl hover:shadow-2xl transition-all group"
+                                className="flex flex-col items-center p-10 bg-stone-900 text-white rounded-3xl shadow-xl hover:shadow-2xl transition-all group"
                             >
-                                <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-4">AR Studio Interactivo</h3>
-                                <p className="text-stone-400 text-sm font-light italic">Selecciona, mueve y manipula objetos de la imagen en espacio 3D real.</p>
+                                <h3 className="text-xl font-bold mb-3 uppercase tracking-tighter">AR Studio</h3>
+                                <p className="text-stone-400 text-xs font-light leading-relaxed">Mueve y manipula los objetos de tu propia foto en tiempo real.</p>
+                            </button>
+
+                            <button
+                                onClick={() => setStep("showroom")}
+                                className="flex flex-col items-center p-10 bg-amber-500 text-black rounded-3xl shadow-xl hover:shadow-2xl transition-all group"
+                            >
+                                <div className="w-16 h-16 bg-black/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-bold mb-3 uppercase tracking-tighter italic">Showroom 3D</h3>
+                                <p className="text-stone-900/60 text-xs font-light leading-relaxed">Proyecta muebles reales de nuestro catálogo en tu casa (Google AR).</p>
                             </button>
                         </motion.div>
                     )}
@@ -146,6 +164,12 @@ export default function VisualizerPage() {
                     {step === "studio" && image && (
                         <motion.div key="studio" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[1000] bg-black">
                             <ARStudioComponent imageUrl={image} onClose={() => setStep("upload")} />
+                        </motion.div>
+                    )}
+
+                    {step === "showroom" && (
+                        <motion.div key="showroom" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[1000] bg-black">
+                            <ModelViewer onClose={() => setStep("upload")} />
                         </motion.div>
                     )}
                 </AnimatePresence>

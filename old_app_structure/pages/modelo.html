@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/panorama@1.0.0/dist/panorama.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/panorama@1.0.0/dist/panorama.min.js"></script>
+  </head>
+  <body>
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"
+    ></script>
+
+    <div id="panorama" style="width: 100%; height: 400px"></div>
+
+    <!-- Google Model Viewer Section -->
+    <div
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        width: 300px;
+        height: 300px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      "
+    >
+      <model-viewer
+        src="https://modelviewer.dev/shared-assets/models/Chair.glb"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        poster="poster.webp"
+        shadow-intensity="1"
+        style="width: 100%; height: 100%"
+      >
+        <button
+          slot="ar-button"
+          style="
+            background-color: white;
+            border-radius: 4px;
+            border: none;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 10px;
+          "
+        >
+          👋 Ver en AR
+        </button>
+      </model-viewer>
+    </div>
+
+    <script>
+      // Configuración de Pannellum
+      pannellum.viewer("panorama", {
+        type: "equirectangular",
+        panorama:
+          "https://images.pexels.com/photos/35361410/pexels-photo-35361410.jpeg", // Aquí pones tu foto
+        autoLoad: true,
+        autoRotate: -2, // Hace que la habitación gire sola suavemente
+        showControls: true,
+      });
+    </script>
+  </body>
+</html>
