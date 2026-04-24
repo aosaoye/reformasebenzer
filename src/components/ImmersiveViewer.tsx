@@ -109,7 +109,7 @@ function InterconnectedScene({
 
             <ambientLight intensity={1.5} />
 
-            <motion.group animate={{ opacity: transitioning ? 0 : 1 }}>
+            <group>
                 <Sphere args={[500, 64, 32]} scale={[-1, 1, 1]}>
                     <meshBasicMaterial
                         map={viewMode === "after" ? textureAfter : textureBefore}
@@ -122,7 +122,7 @@ function InterconnectedScene({
                 {!transitioning && currentNode.hotspots.map(h => (
                     <HotspotMarker key={h.id} hotspot={h} onNavigate={onNavigate} />
                 ))}
-            </motion.group>
+            </group>
         </>
     );
 }
