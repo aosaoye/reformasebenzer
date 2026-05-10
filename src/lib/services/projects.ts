@@ -32,7 +32,7 @@ export async function getAllProjects(categorySlug?: string) {
                 name: attributes.title || attributes.name,
                 price: attributes.budget || 0,
                 category: attributes.category?.name || "Sin categoría",
-                image: getStrapiMedia(attributes.mainImage?.url) || "/placeholder-image.jpg",
+                image: getStrapiMedia(attributes.mainImage?.url) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop",
                 description: attributes.description || "",
                 details: [
                     `Ubicación: ${attributes.location || 'N/A'}`,
@@ -66,7 +66,7 @@ export async function getProjectById(id: string) {
             name: attributes.title || attributes.name,
             price: attributes.budget || 0,
             category: attributes.category?.name || "Sin categoría",
-            image: getStrapiMedia(attributes.mainImage?.url) || "/placeholder-image.jpg",
+            image: getStrapiMedia(attributes.mainImage?.url) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop",
             description: attributes.description || "",
             details: [
                 `Ubicación: ${attributes.location || 'N/A'}`,
