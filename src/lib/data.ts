@@ -55,29 +55,5 @@ function getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Generate 40 projects
-for (let i = 1; i <= 40; i++) {
-    const category = categories[getRandomInt(0, categories.length - 1)];
-    const style = styles[getRandomInt(0, styles.length - 1)];
-    const location = locations[getRandomInt(0, locations.length - 1)];
-
-    const name = `${category} en ${location}`;
-    const budget = getRandomInt(5000, 85000);
-
-    const catImages = categoryImages[category] || categoryImages["Interiorismo"];
-    const image = catImages[getRandomInt(0, catImages.length - 1)];
-
-    projects.push({
-        id: i,
-        name: `${name} (${style})`,
-        price: budget,
-        category: category,
-        image: image,
-        description: `Este proyecto de ${category.toLowerCase()} destaca por su enfoque ${style.toLowerCase()}. Realizado íntegramente en ${location}, logramos optimizar cada metro cuadrado garantizando la máxima calidad en los acabados.`,
-        details: [
-            `Ubicación: ${location}`,
-            `Plazo: ${getRandomInt(2, 12)} Semanas`,
-            `Garantía Ebenzer: 5 años`
-        ]
-    });
-}
+// Handcrafted mock database retired. Now loading dynamic data from Strapi backend!
+export const projects: Project[] = [];

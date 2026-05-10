@@ -5,8 +5,21 @@ import Link from "next/link";
 import ProjectCarousel from "@/components/ProjectCarousel";
 import BrandTicker from "@/components/BrandTicker";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { getAllProjects } from "@/lib/services/projects";
 
 export default function Home() {
+    const [projects, setProjects] = useState<any[]>([]);
+
+    useEffect(() => {
+        const load = async () => {
+            const data = await getAllProjects();
+            // Take a subset for home page
+            setProjects(data.slice(0, 6));
+        };
+        load();
+    }, []);
+
     return (
         <main className="antialiased text-stone-900">
             {/* Hero Section */}
@@ -50,7 +63,7 @@ export default function Home() {
             <BrandTicker />
 
             <section className="px-4 md:px-8">
-                <ProjectCarousel />
+                {projects.length > 0 && <ProjectCarousel projects={projects} />}
             </section>
 
             {/* AI Visualizer Section (New) */}

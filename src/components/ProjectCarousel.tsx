@@ -3,12 +3,10 @@
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { projects as allProjects } from "@/lib/data";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-export default function ProjectCarousel() {
+export default function ProjectCarousel({ projects }: { projects: any[] }) {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [projects, setProjects] = useState(allProjects);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { scrollYProgress } = useScroll({
@@ -17,10 +15,6 @@ export default function ProjectCarousel() {
     });
 
     const xBackground = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
-
-    useEffect(() => {
-        setProjects(allProjects);
-    }, []);
 
     const scroll = (direction: "left" | "right") => {
         if (scrollRef.current) {

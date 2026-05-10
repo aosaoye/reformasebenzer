@@ -1,18 +1,14 @@
-"use client";
-
-import { projects } from "@/lib/data";
+import { getAllProjects } from "@/lib/services/projects";
 import ProjectCard from "@/components/ProjectCard";
 import CategoryFilter from "@/components/CategoryFilter";
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 
-function ProjectsContent() {
-    const searchParams = useSearchParams();
-    const activeCategory = searchParams.get("categoria") || "Todos";
-
-    const filteredProjects = activeCategory === "Todos"
-        ? projects
-        : projects.filter(p => p.category === activeCategory);
+export default async function ProjectsPage({ 
+    searchParams 
+}: { 
+    searchParams: { [key: string]: string | string[] | undefined } 
+}) {
+    const activeCategory = (searchParams?.categoria as string) || "Todos";
+    const filteredProjects = await getAllProjects(activeCategory);
 
     return (
         <main className="px-6 py-12 mx-auto max-w-7xl animate-in fade-in duration-700">
@@ -35,24 +31,17 @@ function ProjectsContent() {
                 {/* Grid */}
                 <div className="flex-1">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
-                        {filteredProjects.map((project) => (
+                        {filteredProjects.map((project: any) => (
                             <ProjectCard key={project.id} project={project} />
                         ))}
                     </div>
+                    {filteredProjects.length === 0 && (
+                        <div className="py-20 text-center text-stone-500">
+                            No hay proyectos que coincidan con esta selección.
+                        </div>
+                    )}
                 </div>
             </div>
         </main>
-    );
-}
-
-export default function ProjectsPage() {
-    return (
-        <Suspense fallback={
-            <div className="min-h-screen bg-stone-50 flex items-center justify-center">
-                <div className="w-12 h-12 border-4 border-stone-200 border-t-stone-900 rounded-full animate-spin"></div>
-            </div>
-        }>
-            <ProjectsContent />
-        </Suspense>
     );
 }

@@ -1,16 +1,17 @@
-import { projects } from "@/lib/data";
+import { getProjectById, getAllProjects } from "@/lib/services/projects";
 import { notFound } from "next/navigation";
 import ProjectCard from "@/components/ProjectCard";
 import Link from "next/link";
 
-export default function ProjectDetailPage({ params }: { params: { id: string } }) {
-    const project = projects.find(p => p.id === parseInt(params.id));
+export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
+    const project = await getProjectById(params.id);
 
     if (!project) {
         notFound();
     }
 
-    const similarProjects = projects
+    const allProjects = await getAllProjects();
+    const similarProjects = allProjects
         .filter(p => p.category === project.category && p.id !== project.id)
         .slice(0, 3);
 
@@ -62,15 +63,15 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                         </div>
                         <div>
                             <span className="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Localización</span>
-                            <p className="font-bold text-stone-900">{project.details[0].split(': ')[1]}</p>
+                            <p className="font-bold text-stone-900">{project.details[0]?.includes(': ') ? project.details[0].split(': ')[1] : project.details[0]}</p>
                         </div>
                         <div>
                             <span className="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Plazo</span>
-                            <p className="font-bold text-stone-900">{project.details[1].split(': ')[1]}</p>
+                            <p className="font-bold text-stone-900">{project.details[1]?.includes(': ') ? project.details[1].split(': ')[1] : project.details[1]}</p>
                         </div>
                         <div>
                             <span className="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Garantía</span>
-                            <p className="font-bold text-stone-900">5 Años</p>
+                            <p className="font-bold text-stone-900">{project.details[2]?.includes(': ') ? project.details[2].split(': ')[1] : '5 Años'}</p>
                         </div>
                     </div>
 
@@ -90,7 +91,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                         <Link href="/proyectos" className="text-xs font-bold tracking-widest uppercase border-b border-stone-900">Ver todos</Link>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        {similarProjects.map((p) => (
+                        {similarProjects.map((p: any) => (
                             <ProjectCard key={p.id} project={p} />
                         ))}
                     </div>
@@ -101,8 +102,9 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 }
 
 // SSG
-export function generateStaticParams() {
-    return projects.map((project) => ({
+export async function generateStaticParams() {
+    const allProjects = await getAllProjects();
+    return allProjects.map((project: any) => ({
         id: project.id.toString(),
     }));
 }
