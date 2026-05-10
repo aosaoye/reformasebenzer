@@ -12,7 +12,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
 
     const allProjects = await getAllProjects();
     const similarProjects = allProjects
-        .filter(p => p.category === project.category && p.id !== project.id)
+        .filter((p: any) => p.category === project.category && p.id !== project.id)
         .slice(0, 3);
 
     return (
