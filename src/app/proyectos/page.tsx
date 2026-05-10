@@ -2,6 +2,8 @@ import { getAllProjects } from "@/lib/services/projects";
 import ProjectCard from "@/components/ProjectCard";
 import CategoryFilter from "@/components/CategoryFilter";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProjectsPage({ 
     searchParams 
 }: { 

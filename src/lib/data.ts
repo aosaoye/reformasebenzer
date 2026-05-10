@@ -56,4 +56,3 @@ function getRandomInt(min: number, max: number) {
 }
 
 // Handcrafted mock database retired. Now loading dynamic data from Strapi backend!
-export const projects: Project[] = [];
