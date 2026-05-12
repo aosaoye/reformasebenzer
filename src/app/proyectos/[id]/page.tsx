@@ -29,11 +29,12 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
 
             <div className="flex flex-col gap-12 mb-24">
                 <MediaShowcase 
-                   images={project.images || [project.image]} 
-                   videos={project.videos || []} 
+                   images={(project.images || [project.image]).filter((img): img is string => !!img)} 
+                   videos={(project.videos || []).filter((vid): vid is string => !!vid)} 
                    title={project.name} 
                 />
             </div>
+
 
             <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24 mb-32 border-t border-stone-100 pt-16">
 
