@@ -2,6 +2,7 @@ import { getProjectById, getAllProjects } from "@/lib/services/projects";
 import { notFound } from "next/navigation";
 import ProjectCard from "@/components/ProjectCard";
 import Link from "next/link";
+import MediaShowcase from "@/components/MediaShowcase";
 
 export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
     const project = await getProjectById(params.id);
@@ -26,17 +27,16 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
                 <span className="text-stone-900 font-bold">{project.name}</span>
             </nav>
 
-            <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24 mb-32">
-                {/* Images */}
-                <div className="lg:col-span-12">
-                    <div className="aspect-[21/9] overflow-hidden rounded-[2rem] bg-stone-100 mb-8">
-                        <img
-                            src={project.image}
-                            alt={project.name}
-                            className="object-cover w-full h-full"
-                        />
-                    </div>
-                </div>
+            <div className="flex flex-col gap-12 mb-24">
+                <MediaShowcase 
+                   images={project.images || [project.image]} 
+                   videos={project.videos || []} 
+                   title={project.name} 
+                />
+            </div>
+
+            <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24 mb-32 border-t border-stone-100 pt-16">
+
 
                 {/* Info */}
                 <div className="lg:col-span-8">

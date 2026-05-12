@@ -6,16 +6,26 @@ import ProjectCarousel from "@/components/ProjectCarousel";
 import BrandTicker from "@/components/BrandTicker";
 import { motion } from "framer-motion";
 
-export default function HomeClient({ projects }: { projects: any[] }) {
+import TestimonialsGrid from "@/components/TestimonialsGrid";
+
+export default function HomeClient({ projects, homepage, testimonials = [] }: { projects: any[], homepage: any, testimonials?: any[] }) {
+    const heroData = homepage || {
+        heroTitle: "Espacios que cuentan tu historia.",
+        heroSubtitle: "arquitectura • interiorismo • reformas",
+        heroImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=90&w=2000",
+        ctaText: "Solicitar Presupuesto",
+        ctaLink: "/contact"
+    };
+
     return (
         <main className="antialiased text-stone-900">
             {/* Hero Section */}
             <section className="mx-auto max-w-7xl px-4 md:px-8 py-6 md:py-12">
                 <div className="relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem] bg-stone-200 aspect-[5/6] md:aspect-[21/9] shadow-2xl">
                     <Image
-                        src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=90&w=2000"
+                        src={heroData.heroImage}
                         className="object-cover w-full h-full"
-                        alt="Reforma de Lujo"
+                        alt="Hero Principal"
                         fill
                         priority
                     />
@@ -26,26 +36,25 @@ export default function HomeClient({ projects }: { projects: any[] }) {
                             <motion.h2
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-4xl md:text-7xl text-white font-light leading-[0.9] mb-6 tracking-tighter"
-                            >
-                                Espacios que <br />
-                                <span className="font-black italic">cuentan tu historia.</span>
-                            </motion.h2>
+                                className="text-4xl md:text-7xl text-white font-light leading-[0.9] mb-6 tracking-tighter whitespace-pre-line"
+                                dangerouslySetInnerHTML={{ __html: heroData.heroTitle.replace("historia.", '<span class="font-black italic">historia.</span>') }}
+                            />
                             <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-white/70 font-bold mb-8 md:mb-12">
-                                arquitectura • interiorismo • reformas
+                                {heroData.heroSubtitle}
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <Link
-                                    href="/contact"
+                                    href={heroData.ctaLink || "/contact"}
                                     className="bg-white text-stone-900 px-10 py-5 rounded-full font-black uppercase text-[10px] tracking-[0.2em] hover:bg-stone-900 hover:text-white transition-all shadow-2xl active:scale-95 text-center"
                                 >
-                                    Solicitar Presupuesto
+                                    {heroData.ctaText}
                                 </Link>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+
 
             <BrandTicker />
 
@@ -102,6 +111,8 @@ export default function HomeClient({ projects }: { projects: any[] }) {
                 </div>
             </section>
 
+            <TestimonialsGrid initialTestimonials={testimonials} />
+
             {/* Commitment Section */}
             <section className="mx-auto max-w-7xl px-4 md:px-8 mb-48">
                 <div className="relative py-32 bg-stone-900 text-stone-100 rounded-[3rem] md:rounded-[4rem] px-8 md:px-20 overflow-hidden shadow-2xl group">
@@ -133,11 +144,11 @@ export default function HomeClient({ projects }: { projects: any[] }) {
                         </p>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-20">
                             <div className="flex flex-col gap-2">
-                                <span className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">15+</span>
+                                <span className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">{heroData.statsYears}+</span>
                                 <span className="text-[9px] uppercase tracking-[0.3em] text-stone-500 font-black">Años de maestría</span>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <span className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">500+</span>
+                                <span className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">{heroData.statsProjects}+</span>
                                 <span className="text-[9px] uppercase tracking-[0.3em] text-stone-500 font-black">Historias creadas</span>
                             </div>
                             <div className="flex flex-col gap-2">
@@ -145,6 +156,7 @@ export default function HomeClient({ projects }: { projects: any[] }) {
                                 <span className="text-[9px] uppercase tracking-[0.3em] text-stone-500 font-black">Satisfacción total</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>
