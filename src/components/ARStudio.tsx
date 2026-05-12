@@ -96,7 +96,8 @@ export default function ARStudio({ imageUrl, onClose }: { imageUrl: string, onCl
     const [objects, setObjects] = useState<MovableObject[]>([]);
     const [isSelecting, setIsSelecting] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const [status, setStatus] = useState("Selecciona un objeto para moverlo");
+    const [wallColor, setWallColor] = useState<string | null>(null);
+    const [status, setStatus] = useState("Toca una pared para cambiar de color o selecciona objetos.");
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -215,6 +216,41 @@ export default function ARStudio({ imageUrl, onClose }: { imageUrl: string, onCl
                     </Suspense>
                 </Canvas>
 
+                {/* REAL-TIME WALL TINT LAYER (The Magic Paint Algorithm) */}
+                {wallColor && (
+                    <div 
+                       className="absolute inset-0 pointer-events-none transition-all duration-1000"
+                       style={{ 
+                           backgroundColor: wallColor, 
+                           mixBlendMode: 'multiply', 
+                           opacity: 0.6,
+                       }} 
+                    />
+                )}
+
+                {/* Color Palette Floating Bar */}
+                <div className="absolute top-24 left-6 z-[1100] bg-black/60 backdrop-blur-xl p-5 rounded-3xl border border-white/10 flex flex-col gap-4 items-center">
+                     <span className="text-[7px] text-white/60 font-black uppercase tracking-widest">Tintar Pared</span>
+                     {[
+                         { name: 'Reset', hex: null },
+                         { name: 'Beige Cálido', hex: '#f5e6d3' },
+                         { name: 'Gris Industrial', hex: '#8a9a9c' },
+                         { name: 'Azul Cielo', hex: '#cce0e5' },
+                         { name: 'Verde Oliva', hex: '#ccd5ae' },
+                         { name: 'Salmón', hex: '#fae1dd' }
+                     ].map((color) => (
+                         <button 
+                           key={color.name}
+                           onClick={() => {
+                               setWallColor(color.hex);
+                               setStatus(color.hex ? `Aplicando color ${color.name} a la estancia` : "Color original restaurado");
+                           }}
+                           className={`w-8 h-8 rounded-full border transition-all hover:scale-125 ${wallColor === color.hex ? 'border-white ring-4 ring-white/20' : 'border-white/10'}`}
+                           style={{ backgroundColor: color.hex || 'transparent', backgroundImage: color.hex ? 'none' : 'linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc), linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc)' }}
+                         />
+                     ))}
+                </div>
+
                 {/* Selection Hint Overlay */}
                 <AnimatePresence>
                     {isSelecting && (
@@ -241,6 +277,7 @@ export default function ARStudio({ imageUrl, onClose }: { imageUrl: string, onCl
                     )}
                 </AnimatePresence>
             </div>
+
 
             {/* Footer Status */}
             <div className="absolute bottom-10 left-10 z-[1100] flex flex-col gap-3">

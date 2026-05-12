@@ -14,12 +14,23 @@ const ModelViewer = dynamic(() => import("@/components/ModelViewer"), {
     loading: () => <div className="fixed inset-0 bg-stone-950 flex items-center justify-center text-white text-xs font-bold uppercase tracking-widest animate-pulse">Cargando Catálogo 3D...</div>
 });
 
+import { getCatalog3D, Product3D } from "@/lib/services/viewer3d";
+
 type Step = "upload" | "processing" | "choice" | "viewer" | "studio" | "showroom";
 
 export default function VisualizerPage() {
     const [step, setStep] = useState<Step>("upload");
     const [image, setImage] = useState<string | null>(null);
     const [progress, setProgress] = useState(0);
+    const [catalog, setCatalog] = useState<Product3D[]>([]);
+
+    useEffect(() => {
+        async function loadCatalog() {
+            const items = await getCatalog3D();
+            setCatalog(items);
+        }
+        loadCatalog();
+    }, []);
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -169,9 +180,10 @@ export default function VisualizerPage() {
 
                     {step === "showroom" && (
                         <motion.div key="showroom" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[1000] bg-black">
-                            <ModelViewer onClose={() => setStep("upload")} />
+                            <ModelViewer products={catalog} onClose={() => setStep("upload")} />
                         </motion.div>
                     )}
+
                 </AnimatePresence>
             </div>
         </main>
