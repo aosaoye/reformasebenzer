@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
@@ -13,6 +13,45 @@ if (typeof window !== "undefined") {
 export default function Footer() {
     const footerRef = useRef<HTMLElement>(null);
     const brandTextRef = useRef<HTMLSpanElement>(null);
+    const [email, setEmail] = useState("");
+    const [status, setStatus] = useState<{
+        loading: boolean;
+        success?: boolean;
+        message?: string;
+    }>({ loading: false });
+
+    const handleSubscribe = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        if (!email) return;
+        setStatus({ loading: true });
+
+        try {
+            const response = await fetch("/api/newsletter", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Error en la suscripción.");
+            }
+
+            setStatus({
+                loading: false,
+                success: true,
+                message: "¡Suscripción completada!"
+            });
+            setEmail("");
+        } catch (error: any) {
+            setStatus({
+                loading: false,
+                success: false,
+                message: error.message || "Inténtalo de nuevo."
+            });
+        }
+    };
 
     useEffect(() => {
         if (brandTextRef.current) {
@@ -60,8 +99,8 @@ export default function Footer() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 text-left mb-20">
                             <div className="flex flex-col gap-6">
                                 <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400">Email</h4>
-                                <a href="mailto:info@reformasebenzer.com" className="text-xl font-medium text-stone-900 transition hover:opacity-50 break-words underline underline-offset-[12px] decoration-stone-200">
-                                    info@reformasebenzer.com
+                                <a href="mailto:rfebenezer.sl@gmail.com" className="text-xl font-medium text-stone-900 transition hover:opacity-50 break-words underline underline-offset-[12px] decoration-stone-200">
+                                    rfebenezer.sl@gmail.com
                                 </a>
                             </div>
                             <div className="flex flex-col gap-6">
@@ -72,22 +111,54 @@ export default function Footer() {
                             </div>
                         </div>
 
-                        <form className="relative max-w-md group">
-                            <input
-                                type="email"
-                                placeholder="Escribe tu email"
-                                className="w-full py-6 text-[10px] font-bold tracking-[0.4em] uppercase transition-all bg-transparent border-b border-stone-200 focus:outline-none focus:border-stone-900 focus:pl-4"
-                            />
-                            <button
-                                type="submit"
-                                className="absolute right-0 transition-all bottom-6 text-stone-900 hover:translate-x-2 flex items-center gap-6 group"
-                            >
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all">Enviar</span>
-                                <div className="w-10 h-10 rounded-full bg-stone-900 text-white flex items-center justify-center hover:scale-110 transition-transform">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                                </div>
-                            </button>
-                        </form>
+                        <div className="relative max-w-md group flex flex-col">
+                            <div className="relative flex items-center w-full">
+                                <input
+                                    type="email"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                            handleSubscribe();
+                                        }
+                                    }}
+                                    disabled={status.loading}
+                                    placeholder={status.loading ? "Procesando..." : "Escribe tu email"}
+                                    className="w-full py-6 text-[10px] font-bold tracking-[0.4em] uppercase transition-all bg-transparent border-b border-stone-200 focus:outline-none focus:border-stone-900 focus:pl-4"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => handleSubscribe()}
+                                    disabled={status.loading}
+                                    className="absolute right-0 transition-all bottom-6 text-stone-900 hover:translate-x-2 flex items-center gap-6 group disabled:opacity-50 disabled:hover:translate-x-0"
+                                >
+                                    <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all">
+                                        {status.loading ? "..." : "Enviar"}
+                                    </span>
+                                    <div className="w-10 h-10 rounded-full bg-stone-900 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                                        {status.loading ? (
+                                            <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        ) : (
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                        )}
+                                    </div>
+                                </button>
+                            </div>
+                            {status.message && (
+                                <motion.span 
+                                    initial={{ opacity: 0, y: 5 }} 
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className={`text-[9px] uppercase tracking-[0.2em] font-bold mt-4 block ${status.success ? 'text-stone-900' : 'text-red-500'}`}
+                                >
+                                    {status.message}
+                                </motion.span>
+                            )}
+                        </div>
                     </div>
 
                     <div className="col-span-12 lg:col-span-6 flex flex-col justify-end">

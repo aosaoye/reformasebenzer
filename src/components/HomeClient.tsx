@@ -67,22 +67,22 @@ export default function HomeClient({ projects, homepage, testimonials = [] }: { 
                 <div className="relative overflow-hidden bg-stone-50 rounded-[3rem] md:rounded-[4rem] px-8 py-16 md:px-24 md:py-24 border border-stone-100 shadow-inner">
                     <div className="flex flex-col md:flex-row items-center gap-20 relative z-10">
                         <div className="flex-1 text-center md:text-left">
-                            <span className="text-[10px] uppercase tracking-[0.5em] font-black text-stone-400 mb-8 block">Ebenzer Reality</span>
+                            <span className="text-[10px] uppercase tracking-[0.5em] font-black text-stone-400 mb-8 block">Ebenzer Engine</span>
                             <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-10 leading-[0.95]">
-                                Tu casa, <br />
-                                <span className="text-stone-300 italic font-light">ahora en 3D.</span>
+                                Del vídeo, <br />
+                                <span className="text-stone-300 italic font-light">a la escena 3D.</span>
                             </h2>
                             <p className="text-stone-500 text-base md:text-lg font-light leading-relaxed mb-12 max-w-lg mx-auto md:mx-0">
-                                Entra en nuestro visualizador inmersivo. Sube una foto de tu estancia y nosotros nos encargamos de proyectarla en un entorno 360° para que sientas cada cambio antes de que ocurra.
+                                Sube un vídeo de tu casa y nuestra IA creará un modelo 3D interactivo y acotado. Mide distancias, segmenta paredes y simula nuevos colores y materiales al instante.
                             </p>
                             <Link
                                 href="/visualizador"
                                 className="inline-flex items-center gap-4 bg-stone-900 text-stone-100 px-10 py-5 rounded-full font-bold uppercase text-[10px] tracking-widest shadow-2xl hover:bg-stone-800 transition transform hover:-translate-y-1"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                 </svg>
-                                Iniciar Visor 3D
+                                Escenificar Vídeo 3D
                             </Link>
                         </div>
                         <Link href="/visualizador" className="flex-1 relative aspect-square w-full max-w-[500px] overflow-hidden rounded-[3rem] shadow-2xl group cursor-pointer block">
@@ -102,7 +102,7 @@ export default function HomeClient({ projects, homepage, testimonials = [] }: { 
                                     </div>
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-stone-900 underline underline-offset-4">Ver Demo Inmersiva</span>
                                 </div>
-                                <p className="text-[9px] text-stone-500 leading-tight">Mueve tu dispositivo o arrastra con el ratón para explorar el espacio.</p>
+                                <p className="text-[9px] text-stone-500 leading-tight">Transforma una grabación de vídeo en una escena 3D inteligente y acotada.</p>
                             </div>
                         </Link>
                     </div>

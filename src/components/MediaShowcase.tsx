@@ -54,7 +54,7 @@ export default function MediaShowcase({ images, videos, title }: MediaShowcasePr
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           {/* Main Wide Image */}
           {images[0] && (
-            <div className="md:col-span-12 aspect-[21/9] relative overflow-hidden rounded-[2rem] group">
+            <div className="md:col-span-12 aspect-[4/3] md:aspect-[21/9] relative overflow-hidden rounded-[2rem] group">
               <Image 
                 src={images[0]} 
                 alt={`${title} - Principal`} 
