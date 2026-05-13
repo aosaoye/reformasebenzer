@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState, useMemo } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, Splat, Grid, Html } from "@react-three/drei";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,6 +23,16 @@ class SceneErrorBoundary extends React.Component<
         if (this.state.hasError) return null;
         return this.props.children;
     }
+}
+
+// Tiny helper: fires callback once Suspense resolves and this component mounts
+function LoadNotifier({ onReady }: { onReady: () => void }) {
+    useEffect(() => {
+        // Small delay to let the first frame render
+        const t = setTimeout(onReady, 600);
+        return () => clearTimeout(t);
+    }, [onReady]);
+    return null;
 }
 
 interface Scene3DEditorProps {
@@ -186,11 +196,12 @@ export default function Scene3DEditor({ splatUrl, videoPreviewUrl, onClose }: Sc
                             >
                                 <Splat
                                     src={splatUrl}
-                                    onLoad={() => setIsLoading(false)}
-                                    onError={() => { setIsLoading(false); setLoadError(true); }}
                                     position={[0, 0, 0]}
                                 />
                             </group>
+
+                            {/* Once Suspense resolves and this renders, loading is done */}
+                            <LoadNotifier onReady={() => setIsLoading(false)} />
 
                             {showGrid && (
                                 <Grid
