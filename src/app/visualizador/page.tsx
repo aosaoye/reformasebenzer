@@ -1,233 +1,358 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
-// Dynamically load editor to avoid window object SSR crashes
-const Scene3DEditor = dynamic(() => import("@/components/Scene3DEditor"), { 
+const Scene3DEditor = dynamic(() => import("@/components/Scene3DEditor"), {
     ssr: false,
     loading: () => (
-        <div className="fixed inset-0 bg-[#0c0d0e] flex items-center justify-center">
-            <div className="text-center">
-                <div className="w-12 h-12 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                <h2 className="text-stone-400 text-[10px] uppercase font-black tracking-[0.3em]">Cargando Renderizador Splatting</h2>
-            </div>
+        <div className="fixed inset-0 bg-stone-950 flex items-center justify-center">
+            <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
         </div>
-    )
+    ),
 });
 
-type Step = "intro" | "upload" | "processing" | "editor";
+type Step = "intro" | "upload-video" | "processing-guide" | "upload-splat" | "viewer";
 
-export default function VisualizerPage() {
+export default function VisualizadorPage() {
     const [step, setStep] = useState<Step>("intro");
-    const [progress, setProgress] = useState(0);
-    const [fileName, setFileName] = useState("");
+    const [videoFile, setVideoFile] = useState<File | null>(null);
+    const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
     const [splatUrl, setSplatUrl] = useState<string | null>(null);
-    const router = useRouter();
+    const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState("");
+    const videoInputRef = useRef<HTMLInputElement>(null);
+    const splatInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle video file selection
+    const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setSplatUrl(url);
-            setFileName(file.name);
-            setStep("processing");
-            setProgress(0);
+        if (!file) return;
+        setVideoFile(file);
+        setVideoPreviewUrl(URL.createObjectURL(file));
+    };
+
+    // Upload video to backend
+    const handleVideoUpload = async () => {
+        if (!videoFile) return;
+        setUploading(true);
+        setUploadProgress("Subiendo vídeo al servidor...");
+
+        try {
+            const formData = new FormData();
+            formData.append("video", videoFile);
+
+            const res = await fetch("/api/upload-video", { method: "POST", body: formData });
+            const data = await res.json();
+
+            if (data.success) {
+                setUploadProgress("¡Vídeo almacenado! Avanzando al siguiente paso...");
+                setTimeout(() => {
+                    setStep("processing-guide");
+                    setUploading(false);
+                }, 1200);
+            } else {
+                setUploadProgress(`Error: ${data.error}`);
+                setUploading(false);
+            }
+        } catch {
+            setUploadProgress("Error de conexión al subir el vídeo");
+            setUploading(false);
         }
     };
 
-    const handleLoadDemo = () => {
-        // Pointing to a stable open-source sample Gaussian Splat asset via verified HuggingFace dataset
-        setSplatUrl("https://huggingface.co/datasets/cakewalk/splat-data/resolve/main/plush.splat");
-        setFileName("Oso_De_Peluche_Fotorrealista.splat");
-        setStep("processing");
-        setProgress(0);
+    // Handle .splat file selection → go directly to viewer
+    const handleSplatSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        setSplatUrl(url);
+        setStep("viewer");
     };
-
-    // Simulate AI pipeline parsing/loading phase
-    useEffect(() => {
-        if (step === "processing") {
-            const interval = setInterval(() => {
-                setProgress((prev) => {
-                    if (prev >= 100) {
-                        clearInterval(interval);
-                        setTimeout(() => setStep("editor"), 800);
-                        return 100;
-                    }
-                    return prev + 4;
-                });
-            }, 100);
-            return () => clearInterval(interval);
-        }
-    }, [step]);
 
     return (
-        <main className="min-h-screen bg-stone-950 font-sans flex items-center justify-center overflow-hidden select-none">
-            
-            {/* Static Abstract Cybernetic BG Grid */}
-            <div className="absolute inset-0 pointer-events-none opacity-20">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-stone-950 via-stone-950/90 to-amber-900/20" />
+        <main className="min-h-screen bg-stone-950 text-white font-sans select-none overflow-hidden">
+            {/* Background grid */}
+            <div className="fixed inset-0 pointer-events-none">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:48px_48px]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-stone-950 via-stone-950/95 to-stone-950" />
             </div>
 
             <AnimatePresence mode="wait">
-                
-                {/* STEP 1: TECHNOLOGY SELECTION INTRO */}
+                {/* ═══════════════════ STEP 1: INTRO ═══════════════════ */}
                 {step === "intro" && (
-                    <motion.div 
+                    <motion.div
                         key="intro"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="relative z-10 text-center px-6 max-w-2xl"
+                        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center"
                     >
-                        <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.4em] block mb-4">💻 Next-Gen 3D Technology</span>
-                        <h1 className="text-white text-4xl md:text-6xl italic font-black tracking-tighter uppercase leading-none mb-6">
-                            Gaussian <br /><span className="text-stone-400">Splatting</span>
+                        <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.5em] mb-6 block">Tecnología Real De Reconstrucción 3D</span>
+                        <h1 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter leading-[0.9] mb-6">
+                            Tu Espacio Real<br />
+                            <span className="text-stone-500">En 3D Interactivo</span>
                         </h1>
-                        <p className="text-stone-400 text-[11px] tracking-wider uppercase font-bold leading-relaxed max-w-md mx-auto mb-10">
-                            Reconstrucción volumétrica fotorrealista en tiempo real. Transforma tu espacio físico en una copia digital interactiva perfecta.
+                        <p className="text-stone-400 text-xs md:text-sm max-w-lg leading-relaxed mb-12">
+                            Graba un vídeo de tu habitación con el móvil. Nosotros lo convertimos en un modelo 3D fotorrealista navegable donde podrás visualizar cómo quedarán los nuevos materiales antes de empezar la reforma.
                         </p>
-                        
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <button 
-                                onClick={() => setStep("upload")}
-                                className="px-10 py-5 bg-amber-500 hover:bg-amber-400 text-black font-black text-[9px] uppercase tracking-widest rounded-full shadow-2xl shadow-amber-500/10 transition-all scale-100 hover:scale-[1.02] active:scale-[0.98]"
+
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <button
+                                onClick={() => setStep("upload-video")}
+                                className="px-10 py-5 bg-amber-500 hover:bg-amber-400 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-full shadow-2xl shadow-amber-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                             >
-                                Iniciar Mi Proyecto 3D
+                                📹 Subir Vídeo De Mi Habitación
                             </button>
-                            <button 
-                                onClick={handleLoadDemo}
-                                className="px-10 py-5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black text-[9px] uppercase tracking-widest rounded-full transition-all"
+                            <button
+                                onClick={() => splatInputRef.current?.click()}
+                                className="px-10 py-5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full transition-all"
                             >
-                                Ver Demo En Tiempo Real
+                                📦 Ya Tengo Mi Archivo .splat
                             </button>
+                            <input
+                                ref={splatInputRef}
+                                type="file"
+                                accept=".splat,.ply"
+                                className="hidden"
+                                onChange={handleSplatSelect}
+                            />
+                        </div>
+
+                        {/* How it works */}
+                        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl w-full">
+                            {[
+                                { step: "1", title: "Graba tu habitación", desc: "Recorre el espacio con tu móvil grabando un vídeo lento de 30-60 segundos." },
+                                { step: "2", title: "Procesamos en 3D", desc: "Usamos IA de reconstrucción (Gaussian Splatting) para crear tu gemelo digital." },
+                                { step: "3", title: "Diseña tu reforma", desc: "Navega en 3D y visualiza materiales, colores y acabados antes de reformar." },
+                            ].map((item) => (
+                                <div key={item.step} className="text-left bg-white/[0.02] border border-white/5 rounded-2xl p-6">
+                                    <span className="text-amber-500 text-2xl font-black italic">{item.step}</span>
+                                    <h3 className="text-sm font-black uppercase tracking-wide mt-2 mb-1">{item.title}</h3>
+                                    <p className="text-[10px] text-stone-500 leading-relaxed">{item.desc}</p>
+                                </div>
+                            ))}
                         </div>
                     </motion.div>
                 )}
 
-                {/* STEP 2: REAL SPLAT FILE UPLOADER */}
-                {step === "upload" && (
-                    <motion.div 
-                        key="upload"
+                {/* ═══════════════════ STEP 2: UPLOAD VIDEO ═══════════════════ */}
+                {step === "upload-video" && (
+                    <motion.div
+                        key="upload-video"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        className="relative z-10 w-full max-w-lg px-6"
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="relative z-10 min-h-screen flex items-center justify-center px-6"
                     >
-                        <div className="bg-stone-900/80 backdrop-blur-3xl border border-white/5 p-8 rounded-3xl shadow-3xl text-center">
-                            <div className="mb-8">
-                                <span className="text-stone-500 text-[7px] font-black uppercase tracking-[0.3em] block mb-2">Carga de Modelos Volumétricos</span>
-                                <h2 className="text-white text-xl font-black italic uppercase tracking-tight">Importar Malla Real (.splat)</h2>
-                            </div>
-
-                            {/* Big drag & drop file selector */}
-                            <label className="block group cursor-pointer mb-8">
-                                <div className="border-2 border-dashed border-stone-800 group-hover:border-amber-500/40 bg-black/30 p-12 rounded-2xl transition-all flex flex-col items-center justify-center gap-4 hover:bg-black/50">
-                                    <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-black text-stone-400 transition-all">
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <p className="text-white text-[10px] font-black uppercase tracking-widest">Arrastra tu archivo `.splat`</p>
-                                        <p className="text-stone-500 text-[8px] font-bold mt-1 uppercase">O pulsa para explorar tus carpetas</p>
-                                    </div>
-                                </div>
-                                <input 
-                                    type="file" 
-                                    accept=".splat" 
-                                    className="hidden" 
-                                    onChange={handleFileUpload}
-                                />
-                            </label>
-
-                            {/* Educational Guide Grid */}
-                            <div className="bg-white/[0.02] border border-white/5 p-5 rounded-xl text-left">
-                                <span className="text-amber-500 text-[7px] font-black uppercase tracking-widest block mb-3 flex items-center gap-2">
-                                    <span className="animate-pulse">ℹ️</span> ¿Cómo obtener tu archivo .splat?
-                                </span>
-                                <div className="grid grid-cols-3 gap-4 text-[7px] font-bold uppercase tracking-wider text-stone-500">
-                                    <div>
-                                        <span className="text-white block mb-1 font-black">1. Graba Vídeo</span>
-                                        Camina por tu habitación grabando despacio y con buena luz.
-                                    </div>
-                                    <div>
-                                        <span className="text-white block mb-1 font-black">2. Procesa</span>
-                                        Súbelo gratis a webs como <span className="text-stone-300 underline font-black">Luma AI</span> o <span className="text-stone-300 underline font-black">Polycam</span>.
-                                    </div>
-                                    <div>
-                                        <span className="text-white block mb-1 font-black">3. Descarga</span>
-                                        Exporta el modelo en formato <span className="text-amber-400 font-black">Gaussian Splat (.splat)</span> y cárgalo aquí.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button 
-                                onClick={() => setStep("intro")}
-                                className="mt-6 text-stone-500 hover:text-white text-[8px] font-black uppercase tracking-[0.3em] transition-all"
-                            >
-                                ← Volver al inicio
+                        <div className="bg-stone-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl p-8 md:p-10 max-w-xl w-full shadow-2xl">
+                            <button onClick={() => setStep("intro")} className="text-stone-500 hover:text-white text-[9px] font-black uppercase tracking-widest transition-all mb-6 block">
+                                ← Volver
                             </button>
+
+                            <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.4em] block mb-2">Paso 1 de 3</span>
+                            <h2 className="text-2xl font-black italic uppercase tracking-tight mb-1">Sube Tu Vídeo</h2>
+                            <p className="text-stone-500 text-[10px] leading-relaxed mb-8">
+                                Graba un vídeo de 30-60 segundos recorriendo tu habitación lentamente. Buena iluminación y movimientos suaves darán mejor resultado.
+                            </p>
+
+                            {/* Video selector */}
+                            {!videoFile ? (
+                                <label className="group cursor-pointer block">
+                                    <div className="border-2 border-dashed border-stone-800 group-hover:border-amber-500/50 bg-black/30 hover:bg-black/50 p-16 rounded-2xl flex flex-col items-center gap-4 transition-all">
+                                        <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-amber-500 group-hover:text-black text-stone-400 flex items-center justify-center transition-all text-2xl">
+                                            📹
+                                        </div>
+                                        <div className="text-center">
+                                            <p className="text-white text-[10px] font-black uppercase tracking-widest">Selecciona o arrastra tu vídeo</p>
+                                            <p className="text-stone-600 text-[8px] font-bold uppercase mt-1">.mp4 .mov .webm · Máx. 500MB</p>
+                                        </div>
+                                    </div>
+                                    <input ref={videoInputRef} type="file" accept="video/*" className="hidden" onChange={handleVideoSelect} />
+                                </label>
+                            ) : (
+                                <div className="space-y-4">
+                                    {/* Video preview */}
+                                    <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-black">
+                                        <video
+                                            src={videoPreviewUrl!}
+                                            controls
+                                            muted
+                                            className="w-full aspect-video object-contain"
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center justify-between bg-white/[0.03] border border-white/5 rounded-xl p-4">
+                                        <div>
+                                            <p className="text-[10px] font-black text-white uppercase tracking-wider truncate max-w-[200px]">{videoFile.name}</p>
+                                            <p className="text-[8px] text-stone-500 font-bold uppercase">{(videoFile.size / 1024 / 1024).toFixed(1)} MB</p>
+                                        </div>
+                                        <button
+                                            onClick={() => { setVideoFile(null); setVideoPreviewUrl(null); }}
+                                            className="text-stone-500 hover:text-red-400 text-[8px] font-black uppercase tracking-wider transition-all"
+                                        >
+                                            Cambiar
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        onClick={handleVideoUpload}
+                                        disabled={uploading}
+                                        className="w-full py-4 bg-amber-500 hover:bg-amber-400 disabled:bg-stone-700 text-black disabled:text-stone-400 font-black text-[10px] uppercase tracking-[0.2em] rounded-full transition-all shadow-xl disabled:shadow-none"
+                                    >
+                                        {uploading ? uploadProgress : "Subir Vídeo y Continuar →"}
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 )}
 
-                {/* STEP 3: SCANNING & COMPILING PROGRESS PIPELINE */}
-                {step === "processing" && (
-                    <motion.div 
-                        key="processing"
+                {/* ═══════════════════ STEP 3: PROCESSING GUIDE ═══════════════════ */}
+                {step === "processing-guide" && (
+                    <motion.div
+                        key="processing-guide"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="relative z-10 min-h-screen flex items-center justify-center px-6 py-20"
+                    >
+                        <div className="max-w-2xl w-full">
+                            <button onClick={() => setStep("upload-video")} className="text-stone-500 hover:text-white text-[9px] font-black uppercase tracking-widest transition-all mb-6 block">
+                                ← Volver
+                            </button>
+
+                            <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.4em] block mb-2">Paso 2 de 3</span>
+                            <h2 className="text-2xl font-black italic uppercase tracking-tight mb-2">Convierte Tu Vídeo En 3D</h2>
+                            <p className="text-stone-400 text-xs leading-relaxed mb-10">
+                                La conversión de vídeo a modelo 3D requiere procesamiento GPU pesado que se realiza en servicios especializados gratuitos. Sigue estas instrucciones:
+                            </p>
+
+                            {/* Option A: Luma AI */}
+                            <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-6 mb-4">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg">L</div>
+                                    <div className="flex-1">
+                                        <h3 className="text-sm font-black uppercase tracking-wide mb-1">Opción A — Luma AI <span className="text-emerald-400 text-[7px] font-bold uppercase ml-2">Gratis</span></h3>
+                                        <ol className="text-[10px] text-stone-400 space-y-2 mt-3 leading-relaxed list-decimal list-inside">
+                                            <li>Ve a <a href="https://lumalabs.ai/genie" target="_blank" rel="noopener" className="text-amber-400 underline hover:text-amber-300">lumalabs.ai</a> y crea una cuenta gratuita.</li>
+                                            <li>Sube tu vídeo en la sección <strong className="text-white">&quot;3D Capture&quot;</strong>.</li>
+                                            <li>Espera a que procese (5-15 minutos dependiendo de la duración).</li>
+                                            <li>Descarga el resultado en formato <strong className="text-amber-400">.ply</strong> o <strong className="text-amber-400">.splat</strong>.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Option B: Polycam */}
+                            <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-6 mb-4">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg">P</div>
+                                    <div className="flex-1">
+                                        <h3 className="text-sm font-black uppercase tracking-wide mb-1">Opción B — Polycam <span className="text-emerald-400 text-[7px] font-bold uppercase ml-2">Gratis</span></h3>
+                                        <ol className="text-[10px] text-stone-400 space-y-2 mt-3 leading-relaxed list-decimal list-inside">
+                                            <li>Descarga <a href="https://poly.cam" target="_blank" rel="noopener" className="text-amber-400 underline hover:text-amber-300">Polycam</a> en tu iPhone o Android.</li>
+                                            <li>Graba directamente desde la app (tiene modo <strong className="text-white">LiDAR</strong> en iPhone Pro).</li>
+                                            <li>Procesa automáticamente en la nube.</li>
+                                            <li>Exporta como <strong className="text-amber-400">.splat</strong> o <strong className="text-amber-400">.glb</strong>.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Option C: Nerfstudio (advanced) */}
+                            <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-6 mb-8">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg">N</div>
+                                    <div className="flex-1">
+                                        <h3 className="text-sm font-black uppercase tracking-wide mb-1">Opción C — Nerfstudio <span className="text-stone-500 text-[7px] font-bold uppercase ml-2">Avanzado · GPU Local</span></h3>
+                                        <ol className="text-[10px] text-stone-400 space-y-2 mt-3 leading-relaxed list-decimal list-inside">
+                                            <li>Instala <a href="https://docs.nerf.studio" target="_blank" rel="noopener" className="text-amber-400 underline hover:text-amber-300">Nerfstudio</a> en un PC con GPU NVIDIA.</li>
+                                            <li>Ejecuta: <code className="bg-black/50 text-amber-400 px-2 py-0.5 rounded text-[9px]">ns-process-data video --data tu_video.mp4</code></li>
+                                            <li>Entrena: <code className="bg-black/50 text-amber-400 px-2 py-0.5 rounded text-[9px]">ns-train splatfacto --data outputs/</code></li>
+                                            <li>Exporta el <strong className="text-amber-400">.splat</strong> final.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Call to action */}
+                            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 text-center">
+                                <p className="text-amber-400 text-[10px] font-black uppercase tracking-widest mb-4">¿Ya tienes tu archivo .splat o .ply procesado?</p>
+                                <button
+                                    onClick={() => setStep("upload-splat")}
+                                    className="px-10 py-4 bg-amber-500 hover:bg-amber-400 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-full shadow-xl transition-all hover:scale-[1.02]"
+                                >
+                                    Subir Modelo 3D Procesado →
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* ═══════════════════ STEP 4: UPLOAD SPLAT ═══════════════════ */}
+                {step === "upload-splat" && (
+                    <motion.div
+                        key="upload-splat"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="relative z-10 min-h-screen flex items-center justify-center px-6"
+                    >
+                        <div className="bg-stone-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl p-8 md:p-10 max-w-lg w-full shadow-2xl text-center">
+                            <button onClick={() => setStep("processing-guide")} className="text-stone-500 hover:text-white text-[9px] font-black uppercase tracking-widest transition-all mb-6 block text-left w-full">
+                                ← Volver
+                            </button>
+
+                            <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.4em] block mb-2">Paso 3 de 3</span>
+                            <h2 className="text-2xl font-black italic uppercase tracking-tight mb-2">Carga Tu Modelo 3D</h2>
+                            <p className="text-stone-500 text-[10px] leading-relaxed mb-8">
+                                Sube el archivo .splat o .ply que has exportado de Luma AI, Polycam o Nerfstudio.
+                            </p>
+
+                            <label className="group cursor-pointer block mb-6">
+                                <div className="border-2 border-dashed border-stone-800 group-hover:border-amber-500/50 bg-black/30 hover:bg-black/50 p-14 rounded-2xl flex flex-col items-center gap-4 transition-all">
+                                    <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-amber-500 group-hover:text-black text-stone-400 flex items-center justify-center transition-all text-2xl">
+                                        🧊
+                                    </div>
+                                    <div>
+                                        <p className="text-white text-[10px] font-black uppercase tracking-widest">Selecciona tu archivo 3D</p>
+                                        <p className="text-stone-600 text-[8px] font-bold uppercase mt-1">.splat · .ply</p>
+                                    </div>
+                                </div>
+                                <input type="file" accept=".splat,.ply" className="hidden" onChange={handleSplatSelect} />
+                            </label>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* ═══════════════════ STEP 5: 3D VIEWER ═══════════════════ */}
+                {step === "viewer" && splatUrl && (
+                    <motion.div
+                        key="viewer"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="relative z-10 text-center px-6"
+                        className="fixed inset-0 z-[1000]"
                     >
-                        <div className="relative w-28 h-28 mx-auto mb-8 flex items-center justify-center">
-                            <div className="absolute inset-0 border-[1px] border-stone-800 rounded-full" />
-                            <svg className="absolute w-full h-full -rotate-90" viewBox="0 0 100 100">
-                                <circle 
-                                    cx="50" cy="50" r="45" 
-                                    fill="none" stroke="#f59e0b" strokeWidth="2" 
-                                    strokeDasharray={283} 
-                                    strokeDashoffset={283 - (283 * progress) / 100}
-                                    className="transition-all duration-200 ease-out"
-                                />
-                            </svg>
-                            <span className="text-white font-black tracking-tight text-base italic">{progress}%</span>
-                        </div>
-                        <h3 className="text-white text-[11px] font-black tracking-[0.3em] uppercase mb-2 animate-pulse">Descifrando Nube de Puntos</h3>
-                        <p className="text-stone-500 text-[8px] uppercase font-black tracking-widest mb-1">{fileName}</p>
-                        <p className="text-stone-600 text-[7px] uppercase font-bold tracking-wide">Inicializando motor Splatting WebGL en tiempo real...</p>
-                    </motion.div>
-                )}
-
-                {/* STEP 4: THE 3D GAUSSIAN SPLATTING RENDERER */}
-                {step === "editor" && (
-                    <motion.div 
-                        key="editor" 
-                        initial={{ opacity: 0 }} 
-                        animate={{ opacity: 1 }} 
-                        className="fixed inset-0 z-[1000] bg-[#0c0d0e]"
-                    >
-                        <Scene3DEditor 
+                        <Scene3DEditor
                             splatUrl={splatUrl}
+                            videoPreviewUrl={videoPreviewUrl}
                             onClose={() => {
                                 setStep("intro");
-                                setProgress(0);
                                 setSplatUrl(null);
-                            }} 
+                            }}
                         />
                     </motion.div>
                 )}
-
             </AnimatePresence>
 
-            {/* Bottom Brand Badge */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-stone-600 text-[7px] uppercase font-black tracking-[0.4em] tracking-widest opacity-50">
-                Ebenzer Reality Suite © 2026
-            </div>
+            {/* Brand footer */}
+            {step !== "viewer" && (
+                <div className="fixed bottom-6 left-0 right-0 text-center z-10">
+                    <span className="text-stone-700 text-[7px] font-black uppercase tracking-[0.4em]">Ebenzer Reality Suite © 2026</span>
+                </div>
+            )}
         </main>
     );
 }

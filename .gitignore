@@ -32,3 +32,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# video uploads (3D reconstruction pipeline)
+/uploads/
