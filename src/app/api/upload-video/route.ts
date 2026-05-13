@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+
+export const runtime = "edge"; // Runs on edge for faster response
 
 export async function POST(req: NextRequest) {
     try {
@@ -25,26 +25,17 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "El archivo supera el límite de 500MB" }, { status: 400 });
         }
 
-        // Store the uploaded video
-        const uploadDir = path.join(process.cwd(), "uploads", "videos");
-        await mkdir(uploadDir, { recursive: true });
-
-        const timestamp = Date.now();
-        const ext = file.name.split(".").pop() || "mp4";
-        const filename = `scan_${timestamp}.${ext}`;
-        const filepath = path.join(uploadDir, filename);
-
-        const bytes = await file.arrayBuffer();
-        await writeFile(filepath, Buffer.from(bytes));
-
+        // In production (Vercel), filesystem is read-only.
+        // The video stays in the browser as a blob URL for local preview.
+        // The user will process it externally (Luma AI / Polycam / Nerfstudio).
         return NextResponse.json({
             success: true,
-            filename,
+            filename: file.name,
             size: file.size,
-            message: "Vídeo almacenado correctamente. Ahora procesa tu vídeo con Luma AI o Polycam para obtener el archivo .splat"
+            message: "Vídeo validado correctamente. Procesa tu vídeo con Luma AI o Polycam para obtener el archivo .splat"
         });
     } catch (error) {
-        console.error("Error uploading video:", error);
+        console.error("Error processing video upload:", error);
         return NextResponse.json({ error: "Error interno al procesar el vídeo" }, { status: 500 });
     }
 }
