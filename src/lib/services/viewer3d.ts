@@ -10,18 +10,18 @@ export interface Product3D {
 
 const FALLBACK_CATALOG: Product3D[] = [
     {
-        id: "chair-sample",
-        name: "Silla Nórdica Sample",
-        description: "Diseño minimalista (Modo Pruebas)",
-        glbUrl: "https://modelviewer.dev/shared-assets/models/Chair.glb",
-        poster: "https://modelviewer.dev/shared-assets/models/Chair.png"
+        id: "astronaut-sample",
+        name: "Astronauta Ebenzer",
+        description: "Modelo de prueba espacial para validación de AR",
+        glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+        poster: "https://modelviewer.dev/shared-assets/models/Astronaut.png"
     },
     {
-        id: "mixer-sample",
-        name: "Grifería Premium Sample",
-        description: "Acabado metálico (Modo Pruebas)",
-        glbUrl: "https://modelviewer.dev/shared-assets/models/Mixer.glb",
-        poster: "https://modelviewer.dev/shared-assets/models/Mixer.png"
+        id: "neil-sample",
+        name: "Traje Espacial Pro",
+        description: "Selección premium (Modo Pruebas)",
+        glbUrl: "https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb",
+        poster: "https://modelviewer.dev/shared-assets/models/NeilArmstrong.png"
     }
 ];
 
