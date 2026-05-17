@@ -76,26 +76,12 @@ export default function AdminLogin() {
                             Iniciar sesión
                         </h1>
                         <p className="text-stone-500 text-sm">
-                            Introduce tus credenciales para acceder al modo editor.
+                            Introduce la contraseña maestra para acceder al modo editor.
                         </p>
                     </div>
 
                     {/* Form */}
                     <form onSubmit={handleLogin} className="flex flex-col gap-6">
-                        {/* Email Field */}
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[10px] font-bold tracking-widest text-stone-400 uppercase">
-                                EMAIL
-                            </label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-3 rounded-lg border border-stone-200 text-stone-900 focus:outline-none focus:border-stone-900 transition-colors text-sm"
-                                required
-                            />
-                        </div>
-
                         {/* Password Field */}
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-between items-baseline">

@@ -56,7 +56,7 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
             <motion.header
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+                className={`fixed ${isAdmin ? 'top-14' : 'top-0'} left-0 right-0 z-[100] transition-all duration-500 ${
                     isScrolled 
                         ? "bg-white/95 backdrop-blur-md border-b border-stone-100 shadow-sm py-0" 
                         : "bg-transparent border-b border-transparent py-3"

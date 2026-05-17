@@ -12,8 +12,17 @@ export function AdminProvider({ children, isAdmin }: { children: React.ReactNode
     
     useEffect(() => {
         if (isAdmin) {
-            const saved = localStorage.getItem("eb_is_editing");
-            if (saved === "true") setIsEditing(true);
+            const params = new URLSearchParams(window.location.search);
+            if (params.get("edit") === "true") {
+                handleSetIsEditing(true);
+                // Limpiar parámetro de la URL de forma limpia
+                const url = new URL(window.location.href);
+                url.searchParams.delete("edit");
+                window.history.replaceState({}, "", url.toString());
+            } else {
+                const saved = localStorage.getItem("eb_is_editing");
+                if (saved === "true") setIsEditing(true);
+            }
         }
     }, [isAdmin]);
 
