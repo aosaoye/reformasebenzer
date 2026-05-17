@@ -75,28 +75,26 @@ export default function ProjectsClient({
     };
 
     return (
-        <main className="px-8 pt-32 pb-16 mx-auto max-w-[1400px] animate-in fade-in duration-700 relative bg-white">
-            <header className="flex flex-col gap-6 mb-16 pb-8 border-b border-stone-100">
-                <div className="flex justify-between items-start gap-4">
-                    <div className={`max-w-4xl ${isEditing ? 'ring-4 ring-indigo-500/50 p-4 rounded-3xl' : ''}`}>
-                        {isEditing ? (
-                            <textarea 
-                                value={localData.title} 
-                                onChange={(e) => handleUpdate("title", e.target.value)}
-                                className="w-full text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] bg-transparent border-b border-indigo-500 focus:outline-none"
-                                rows={2}
-                            />
-                        ) : (
-                            <h2 
-                                className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900"
-                                dangerouslySetInnerHTML={{ __html: localData.title }}
-                            />
-                        )}
-                    </div>
-                    <span className="text-[11px] font-bold tracking-[0.15em] uppercase text-stone-400 shrink-0 pt-4">
-                        {projects.length} RESULTADOS
-                    </span>
+        <main className="px-8 py-16 mt-20 mx-auto max-w-[1400px] animate-in fade-in duration-700 relative bg-white">
+            <header className="flex items-baseline justify-between gap-4 mb-8 pb-4 border-b border-stone-100">
+                <div className={`max-w-xl ${isEditing ? 'ring-4 ring-indigo-500/50 p-4 rounded-3xl' : ''}`}>
+                    {isEditing ? (
+                        <textarea 
+                            value={localData.title} 
+                            onChange={(e) => handleUpdate("title", e.target.value)}
+                            className="w-full text-4xl font-bold tracking-tight bg-transparent border-b border-indigo-500 focus:outline-none"
+                            rows={1}
+                        />
+                    ) : (
+                        <h2 
+                            className="text-4xl font-bold tracking-tight text-stone-900"
+                            dangerouslySetInnerHTML={{ __html: localData.title }}
+                        />
+                    )}
                 </div>
+                <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-stone-400">
+                    {projects.length} RESULTADOS
+                </span>
             </header>
 
             {/* Horizontal Filter Pill Bar */}

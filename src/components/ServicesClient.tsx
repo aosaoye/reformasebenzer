@@ -70,7 +70,7 @@ export default function ServicesClient({ initialData, isAdmin = false }: { initi
     };
 
     return (
-        <main className="px-6 pt-32 pb-16 mx-auto max-w-7xl overflow-hidden relative">
+        <main className="px-6 py-24 mt-20 mx-auto max-w-7xl overflow-hidden relative">
             
 
             
