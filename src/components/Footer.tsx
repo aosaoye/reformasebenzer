@@ -237,7 +237,7 @@ export default function Footer({ settings, isAdmin }: { settings?: any, isAdmin?
                                 <ul className="flex flex-col gap-5 text-sm font-black tracking-widest uppercase text-stone-900">
                                     <li><Link href="/" className="hover:text-stone-400 transition">Inicio</Link></li>
                                     <li><Link href="/proyectos" className="hover:text-stone-400 transition">Proyectos</Link></li>
-                                    <li><Link href="/visualizador" className="hover:text-stone-400 transition">Visor 3D</Link></li>
+
                                     <li><Link href="/servicios" className="hover:text-stone-400 transition">Servicios</Link></li>
                                 </ul>
                             </div>

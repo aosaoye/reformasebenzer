@@ -19,7 +19,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
 
     return (
         <main className="px-6 py-12 mx-auto max-w-7xl relative group">
-            <AdminEditButton collectionType="projects" documentId={project.id} label="Editar Proyecto" />
+            <AdminEditButton collectionType="projects" documentId={String(project.id)} label="Editar Proyecto" />
             {/* Breadcrumb */}
             <nav className="mb-12 text-[10px] uppercase tracking-widest text-stone-400">
                 <Link href="/" className="hover:text-stone-900 transition">Inicio</Link>
@@ -31,8 +31,8 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
 
             <div className="flex flex-col gap-12 mb-24">
                 <MediaShowcase
-                    images={(project.images || [project.image]).filter((img): img is string => !!img)}
-                    videos={(project.videos || []).filter((vid): vid is string => !!vid)}
+                    images={(project.images || [project.image]).filter((img: any): img is string => !!img)}
+                    videos={(project.videos || []).filter((vid: any): vid is string => !!vid)}
                     title={project.name}
                 />
             </div>

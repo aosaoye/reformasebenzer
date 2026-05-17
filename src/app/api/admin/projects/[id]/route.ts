@@ -10,13 +10,22 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             return NextResponse.json({ success: false, message: "No autorizado" }, { status: 401 });
         }
 
-        const data = await request.json();
+        const { mainImage, galleryUrls, videoUrls, ...strapiData } = await request.json();
         const { id } = params;
+
+        // Save media locally
+        const fs = require('fs/promises');
+        const path = require('path');
+        const mediaPath = path.join(process.cwd(), 'src', 'data', 'projects-media.json');
+        let mediaData: any = {};
+        try { mediaData = JSON.parse(await fs.readFile(mediaPath, 'utf8')); } catch (e) {}
+        mediaData[id] = { mainImage, galleryUrls, videoUrls };
+        await fs.writeFile(mediaPath, JSON.stringify(mediaData, null, 2));
 
         // Update in Strapi 5
         const response = await fetchStrapi(`projects/${id}`, undefined, {
             method: "PUT",
-            body: JSON.stringify({ data })
+            body: JSON.stringify({ data: strapiData })
         });
 
         if (response.error) {

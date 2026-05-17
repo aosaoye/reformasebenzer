@@ -37,7 +37,7 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
     const navLinks = [
         { name: "Inicio", href: "/" },
         { name: "Proyectos", href: "/proyectos" },
-        { name: "Visor 3D", href: "/visualizador" },
+
         { name: "Servicios", href: "/servicios" },
         { name: "Contacto", href: "/contact" },
     ];
@@ -53,7 +53,7 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
         switch (name) {
             case "Inicio": return <ion-icon name="home-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
             case "Proyectos": return <ion-icon name="briefcase-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
-            case "Visor 3D": return <ion-icon name="cube-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
+
             case "Servicios": return <ion-icon name="construct-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
             case "Contacto": return <ion-icon name="mail-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
             default: return null;

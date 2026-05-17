@@ -20,14 +20,17 @@ export default function ProjectManagerModal({ isOpen, onClose, projects }: Proje
         budget: 0,
         location: "",
         timeline: "",
-        warranty: ""
+        warranty: "",
+        mainImage: "",
+        galleryUrls: "",
+        videoUrls: ""
     });
     const router = useRouter();
 
     if (!isOpen) return null;
 
     const resetForm = () => {
-        setFormData({ id: "", title: "", description: "", budget: 0, location: "", timeline: "", warranty: "" });
+        setFormData({ id: "", title: "", description: "", budget: 0, location: "", timeline: "", warranty: "", mainImage: "", galleryUrls: "", videoUrls: "" });
         setMode("list");
     };
 
@@ -39,7 +42,10 @@ export default function ProjectManagerModal({ isOpen, onClose, projects }: Proje
             budget: proj.price || 0,
             location: proj.details?.[0]?.replace("Ubicación: ", "") || "",
             timeline: proj.details?.[1]?.replace("Plazo: ", "") || "",
-            warranty: proj.details?.[2]?.replace("Garantía: ", "") || ""
+            warranty: proj.details?.[2]?.replace("Garantía: ", "") || "",
+            mainImage: proj.image || "",
+            galleryUrls: proj.images ? proj.images.join(", ") : "",
+            videoUrls: proj.videos ? proj.videos.join(", ") : ""
         });
         setMode("form");
     };
@@ -75,7 +81,9 @@ export default function ProjectManagerModal({ isOpen, onClose, projects }: Proje
             location: formData.location,
             timeline: formData.timeline,
             warranty: formData.warranty,
-            // Nota: Para imágenes y relaciones complejas se requiere un módulo de Media Library avanzado.
+            mainImage: formData.mainImage,
+            galleryUrls: formData.galleryUrls.split(",").map(s => s.trim()).filter(Boolean),
+            videoUrls: formData.videoUrls.split(",").map(s => s.trim()).filter(Boolean)
         };
 
         try {
@@ -187,6 +195,24 @@ export default function ProjectManagerModal({ isOpen, onClose, projects }: Proje
                                     <div>
                                         <label className="text-[10px] uppercase tracking-widest font-bold text-stone-500 block mb-2">Garantía</label>
                                         <input value={formData.warranty} onChange={e => setFormData({...formData, warranty: e.target.value})} className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500" placeholder="Ej. 5 años" />
+                                    </div>
+                                </div>
+                                
+                                <div className="border-t border-stone-100 pt-6 mt-2">
+                                    <h3 className="text-sm font-black tracking-tight mb-4 uppercase">Multimedia</h3>
+                                    <div className="flex flex-col gap-4">
+                                        <div>
+                                            <label className="text-[10px] uppercase tracking-widest font-bold text-stone-500 block mb-2">URL Imagen Principal</label>
+                                            <input value={formData.mainImage} onChange={e => setFormData({...formData, mainImage: e.target.value})} className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500" placeholder="https://..." />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] uppercase tracking-widest font-bold text-stone-500 block mb-2">URLs Galería (separadas por coma)</label>
+                                            <textarea value={formData.galleryUrls} onChange={e => setFormData({...formData, galleryUrls: e.target.value})} className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500" placeholder="https://img1.jpg, https://img2.jpg" rows={2} />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] uppercase tracking-widest font-bold text-stone-500 block mb-2">URLs Vídeos (separadas por coma)</label>
+                                            <textarea value={formData.videoUrls} onChange={e => setFormData({...formData, videoUrls: e.target.value})} className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500" placeholder="https://video.mp4" rows={2} />
+                                        </div>
                                     </div>
                                 </div>
 

@@ -35,7 +35,7 @@ export default async function Home() {
             { id: "hero", type: "Hero", visible: true },
             { id: "ticker", type: "BrandTicker", visible: true },
             { id: "projects", type: "ProjectCarousel", visible: true },
-            { id: "visualizer", type: "AIVisualizer", visible: true },
+
             { id: "testimonials", type: "TestimonialsGrid", visible: true },
             { id: "commitment", type: "Commitment", visible: true }
         ];

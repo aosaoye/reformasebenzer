@@ -83,7 +83,16 @@ export async function fetchStrapi(
             throw new Error(`Strapi Request failed for ${endpoint}: ${errorText.substring(0, 150)}`);
         }
 
-        return await response.json();
+        if (response.status === 204) {
+            return { data: null };
+        }
+
+        const text = await response.text();
+        if (!text || text.trim() === "") {
+            return { data: null };
+        }
+
+        return JSON.parse(text);
     } catch (error) {
         console.error("Strapi fetch error:", error);
         throw error;

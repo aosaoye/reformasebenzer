@@ -1,52 +1,47 @@
 [
-    {
-        "id": "hero",
-        "type": "Hero",
-        "visible": true
-    },
-    {
-        "id": "ticker",
-        "type": "BrandTicker",
-        "visible": true
-    },
-    {
-        "id": "projects",
-        "type": "ProjectCarousel",
-        "visible": true
-    },
-    {
-        "id": "visualizer",
-        "type": "AIVisualizer",
-        "visible": true
-    },
-    {
-        "id": "testimonials",
-        "type": "TestimonialsGrid",
-        "visible": true
-    },
-    {
-        "id": "commitment",
-        "type": "Commitment",
-        "visible": true
-    },
-    {
-        "id": "hero_1778995466626",
-        "type": "hero",
-        "visible": true
-    },
-    {
-        "id": "ticker_1778998679528",
-        "type": "ticker",
-        "visible": true
-    },
-    {
-        "id": "commitment_1778995492724",
-        "type": "commitment",
-        "visible": true
-    },
-    {
-        "id": "projects_1778995480617",
-        "type": "projects",
-        "visible": true
-    }
+  {
+    "id": "hero",
+    "type": "Hero",
+    "visible": true
+  },
+  {
+    "id": "ticker",
+    "type": "BrandTicker",
+    "visible": true
+  },
+  {
+    "id": "projects",
+    "type": "ProjectCarousel",
+    "visible": true
+  },
+  {
+    "id": "testimonials",
+    "type": "TestimonialsGrid",
+    "visible": true
+  },
+  {
+    "id": "commitment",
+    "type": "Commitment",
+    "visible": true
+  },
+  {
+    "id": "hero_1778995466626",
+    "type": "hero",
+    "visible": true
+  },
+  {
+    "id": "ticker_1778998679528",
+    "type": "ticker",
+    "visible": true
+  },
+  {
+    "id": "commitment_1778995492724",
+    "type": "commitment",
+    "visible": true
+  },
+  {
+    "id": "projects_1778995480617",
+    "type": "projects",
+    "visible": true
+  }
 ]

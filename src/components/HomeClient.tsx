@@ -233,51 +233,7 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                 {projects.length > 0 && <ProjectCarousel projects={projects} isAdmin={isAdmin} isEditing={isEditing} />}
             </section>
                     ); break;
-                    case "visualizer": blockContent = (
-            <section className="mx-auto max-w-7xl px-4 md:px-8 mb-24 relative group">
-                <div className="relative overflow-hidden bg-stone-50 rounded-[3rem] md:rounded-[4rem] px-8 py-16 md:px-24 md:py-24 border border-stone-100 shadow-inner">
-                    <div className="flex flex-col md:flex-row items-center gap-20 relative z-10">
-                        <div className="flex-1 text-center md:text-left">
-                            <span className="text-[10px] uppercase tracking-[0.5em] font-black text-stone-400 mb-8 block">Ebenzer Engine</span>
-                            <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-10 leading-[0.95]">
-                                Del vídeo, <br />
-                                <span className="text-stone-300 italic font-light">a la escena 3D.</span>
-                            </h2>
-                            <p className="text-stone-500 text-base md:text-lg font-light leading-relaxed mb-12 max-w-lg mx-auto md:mx-0">
-                                Sube un vídeo de tu casa y nuestra IA creará un modelo 3D interactivo y acotado. Mide distancias, segmenta paredes y simula nuevos colores y materiales al instante.
-                            </p>
-                            <Link
-                                href="/visualizador"
-                                className="inline-flex items-center gap-4 bg-stone-900 text-stone-100 px-10 py-5 rounded-full font-bold uppercase text-[10px] tracking-widest shadow-2xl hover:bg-stone-800 transition transform hover:-translate-y-1"
-                            >
-                                <ion-icon name="videocam-outline" style={{ fontSize: '20px', color: '#f5f5f4' }}></ion-icon>
-                                Escenificar Vídeo 3D
-                            </Link>
-                        </div>
-                        <Link href="/visualizador" className="flex-1 relative aspect-square w-full max-w-[500px] overflow-hidden rounded-[3rem] shadow-2xl group cursor-pointer block">
-                            <Image
-                                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200"
-                                alt="Visor 3D"
-                                fill
-                                className="object-cover transition-transform duration-[3s] group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/20 transition-colors"></div>
-                            <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-xl p-6 rounded-3xl shadow-xl border border-white/20 transform transition-transform group-hover:-translate-y-2">
-                                <div className="flex items-center gap-4 mb-3">
-                                    <div className="w-8 h-8 rounded-full bg-stone-900 text-white flex items-center justify-center">
-                                        <ion-icon name="play" style={{ fontSize: '12px', color: '#ffffff' }}></ion-icon>
-                                    </div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-900 underline underline-offset-4">Ver Demo Inmersiva</span>
-                                </div>
-                                <p className="text-[9px] text-stone-500 leading-tight">Transforma una grabación de vídeo en una escena 3D inteligente y acotada.</p>
-                            </div>
-                        </Link>
-                    </div>
-                    <div className="absolute w-64 h-64 bg-stone-200 blur-[100px] rounded-full -top-20 -right-20 opacity-50"></div>
-                    <div className="absolute w-48 h-48 bg-stone-200 blur-[80px] rounded-full bottom-0 left-0 opacity-30"></div>
-                </div>
-            </section>
-                    ); break;
+
                     case "testimonials": blockContent = <TestimonialsGrid initialTestimonials={testimonials} />; break;
                     case "commitment": blockContent = (
             <section className="mx-auto max-w-7xl px-4 md:px-8 mb-48 relative group">
@@ -374,7 +330,7 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                         <button onClick={() => handleAddBlock('hero')} className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-colors">Hero Principal</button>
                         <button onClick={() => handleAddBlock('ticker')} className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-colors">Marcas</button>
                         <button onClick={() => handleAddBlock('projects')} className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-colors">Carrusel Proyectos</button>
-                        <button onClick={() => handleAddBlock('visualizer')} className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-colors">Visor 3D</button>
+
                         <button onClick={() => handleAddBlock('testimonials')} className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-colors">Testimonios</button>
                         <button onClick={() => handleAddBlock('commitment')} className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-colors">Compromiso</button>
                         <button onClick={() => handleAddBlock('spacer')} className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-colors">Espacio Invisible</button>

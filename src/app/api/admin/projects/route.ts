@@ -10,16 +10,29 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, message: "No autorizado" }, { status: 401 });
         }
 
-        const data = await request.json();
+        const { mainImage, galleryUrls, videoUrls, ...strapiData } = await request.json();
 
         // Create in Strapi 5
         const response = await fetchStrapi("projects", undefined, {
             method: "POST",
-            body: JSON.stringify({ data })
+            body: JSON.stringify({ data: strapiData })
         });
 
         if (response.error) {
             return NextResponse.json({ success: false, message: "Error al crear proyecto", details: response.error }, { status: 400 });
+        }
+
+        const newId = response.data?.documentId || response.data?.id;
+
+        if (newId) {
+            // Save media locally
+            const fs = require('fs/promises');
+            const path = require('path');
+            const mediaPath = path.join(process.cwd(), 'src', 'data', 'projects-media.json');
+            let mediaData: any = {};
+            try { mediaData = JSON.parse(await fs.readFile(mediaPath, 'utf8')); } catch (e) {}
+            mediaData[newId] = { mainImage, galleryUrls, videoUrls };
+            await fs.writeFile(mediaPath, JSON.stringify(mediaData, null, 2));
         }
 
         return NextResponse.json({ success: true, data: response.data });

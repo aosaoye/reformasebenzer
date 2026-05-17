@@ -24,15 +24,30 @@ export async function getAllProjects(categorySlug?: string) {
              return mockProjects;
         }
 
+        let mediaData: any = {};
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            const mediaPath = path.join(process.cwd(), 'src', 'data', 'projects-media.json');
+            if (fs.existsSync(mediaPath)) {
+                mediaData = JSON.parse(fs.readFileSync(mediaPath, 'utf8'));
+            }
+        } catch (e) {}
+
         // Map Strapi response to app project shape
         return response.data.map((item: any) => {
             const attributes = item.attributes || item; // Handle Strapi 5 different format variations
+            const id = item.documentId || item.id;
+            const customMedia = mediaData[id] || {};
+            
             return {
-                id: item.documentId || item.id,
+                id,
                 name: attributes.title || attributes.name,
                 price: attributes.budget || 0,
                 category: attributes.category?.name || "Sin categoría",
-                image: getStrapiMedia(attributes.mainImage?.url) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop",
+                image: customMedia.mainImage || getStrapiMedia(attributes.mainImage?.url) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop",
+                images: customMedia.galleryUrls && customMedia.galleryUrls.length > 0 ? [customMedia.mainImage, ...customMedia.galleryUrls].filter(Boolean) : undefined,
+                videos: customMedia.videoUrls || undefined,
                 description: attributes.description || "",
                 details: [
                     `Ubicación: ${attributes.location || 'N/A'}`,
@@ -61,6 +76,16 @@ export async function getProjectById(id: string) {
         const item = response.data;
         const attributes = item.attributes || item;
 
+        let customMedia: any = {};
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            const mediaPath = path.join(process.cwd(), 'src', 'data', 'projects-media.json');
+            if (fs.existsSync(mediaPath)) {
+                customMedia = JSON.parse(fs.readFileSync(mediaPath, 'utf8'))[id] || {};
+            }
+        } catch (e) {}
+
         // Limit to 5 gallery images + main image, and 2 videos
         const galleryRaw = attributes.gallery || [];
         const galleryImages = Array.isArray(galleryRaw) 
@@ -68,16 +93,16 @@ export async function getProjectById(id: string) {
             : [];
 
         // Merge main image first
-        const mainImage = getStrapiMedia(attributes.mainImage?.url);
-        const allImages = [mainImage, ...galleryImages].filter(Boolean).slice(0, 5);
+        const mainImage = customMedia.mainImage || getStrapiMedia(attributes.mainImage?.url);
+        const allImages = customMedia.galleryUrls?.length > 0 ? [mainImage, ...customMedia.galleryUrls].filter(Boolean).slice(0, 5) : [mainImage, ...galleryImages].filter(Boolean).slice(0, 5);
 
         const videosRaw = attributes.videos || []; // Anticipating a videos relation/media field
-        const videoUrls = Array.isArray(videosRaw)
+        const videoUrls = customMedia.videoUrls?.length > 0 ? customMedia.videoUrls : Array.isArray(videosRaw)
             ? videosRaw.map((vid: any) => getStrapiMedia(vid.url)).filter(Boolean).slice(0, 2)
             : [];
 
         return {
-            id: item.documentId || item.id,
+            id,
             name: attributes.title || attributes.name,
             price: attributes.budget || 0,
             category: attributes.category?.name || "Sin categoría",
