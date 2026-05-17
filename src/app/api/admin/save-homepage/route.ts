@@ -36,6 +36,7 @@ export async function PUT(request: Request) {
             statsProjects: Number(data.statsProjects),
             aboutTitle: data.aboutTitle,
             aboutContent: data.aboutContent,
+            publishedAt: new Date().toISOString(),
         };
 
         // Guardamos los campos extra que no existen en el esquema nativo de Strapi
@@ -56,7 +57,7 @@ export async function PUT(request: Request) {
         }
 
         const method = documentExists ? "PUT" : "POST";
-        const endpoint = "homepage";
+        const endpoint = documentExists && documentId ? `homepage/${documentId}` : "homepage";
 
         try {
             const response = await fetchStrapi(endpoint, undefined, {

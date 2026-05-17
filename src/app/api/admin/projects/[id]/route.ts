@@ -11,6 +11,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         }
 
         const { mainImage, galleryUrls, videoUrls, ...strapiData } = await request.json();
+        strapiData.publishedAt = new Date().toISOString();
         const { id } = params;
 
         // Save media locally
