@@ -28,7 +28,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         }
 
         // Update in Strapi 5
-        const response = await fetchStrapi(`projects/${id}`, undefined, {
+        const response = await fetchStrapi(`projects/${id}`, { status: "published" }, {
             method: "PUT",
             body: JSON.stringify({ data: strapiData })
         });

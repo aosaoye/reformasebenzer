@@ -40,17 +40,26 @@ export default async function RootLayout({
     }
 
     // Sync dynamic settings from Strapi so they persist in production on Vercel
+    // Only use Strapi values to SUPPLEMENT missing local values, never overwrite existing ones
     try {
         const { getGlobalSettings } = require("@/lib/services/projects");
         const strapiGlobal = await getGlobalSettings();
         if (strapiGlobal) {
             if (!globalData.navbar) globalData.navbar = {};
-            globalData.navbar.siteName = strapiGlobal.siteName || globalData.navbar.siteName;
+            if (!globalData.navbar.siteName) {
+                globalData.navbar.siteName = strapiGlobal.siteName || "Ebenzer";
+            }
 
             if (!globalData.footer) globalData.footer = {};
-            globalData.footer.siteName = strapiGlobal.siteName || globalData.footer.siteName;
-            globalData.footer.contactEmail = strapiGlobal.contactEmail || globalData.footer.contactEmail;
-            globalData.footer.whatsappNumber = strapiGlobal.whatsappNumber || globalData.footer.whatsappNumber;
+            if (!globalData.footer.siteName) {
+                globalData.footer.siteName = strapiGlobal.siteName || globalData.footer.siteName;
+            }
+            if (!globalData.footer.contactEmail) {
+                globalData.footer.contactEmail = strapiGlobal.contactEmail || globalData.footer.contactEmail;
+            }
+            if (!globalData.footer.whatsappNumber) {
+                globalData.footer.whatsappNumber = strapiGlobal.whatsappNumber || globalData.footer.whatsappNumber;
+            }
         }
     } catch (e) {
         console.warn("No se pudieron fusionar los ajustes globales de Strapi:", e);

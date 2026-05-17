@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         strapiData.publishedAt = new Date().toISOString();
 
         // Create in Strapi 5
-        const response = await fetchStrapi("projects", undefined, {
+        const response = await fetchStrapi("projects", { status: "published" }, {
             method: "POST",
             body: JSON.stringify({ data: strapiData })
         });

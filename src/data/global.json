@@ -6,9 +6,11 @@
     },
     "footer": {
         "tagline": "Construyendo el futuro de la arquitectura",
-        "email": "hola@ebenzer.com",
-        "phone": "+34 900 123 456",
-        "address": "Paseo de la Castellana 123, Madrid",
+        "contactEmail": "rfebenezer.sl@gmail.com",
+        "whatsappNumber": "+34 643 640 502",
+        "footerTitle": "Hablemos de<br />tu <span class=\"text-stone-300 italic font-light\">futuro.</span>",
+        "address": "Zaragoza",
+        "hours": "Horario: 09h - 18h",
         "facebook": "https://facebook.com",
         "instagram": "https://instagram.com"
     },

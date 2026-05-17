@@ -48,7 +48,7 @@ export async function PUT(request: Request) {
         console.log("Payload:", strapiPayload);
 
         try {
-            const response = await fetchStrapi(endpoint, undefined, {
+            const response = await fetchStrapi(endpoint, { status: "published" }, {
                 method: method,
                 cache: "no-store",
                 body: JSON.stringify({ data: strapiPayload })

@@ -81,7 +81,7 @@ export async function PUT(request: Request) {
             try {
                 const { fetchStrapi } = require("@/lib/strapi");
                 const endpoint = "global";
-                await fetchStrapi(endpoint, undefined, {
+                await fetchStrapi(endpoint, { status: "published" }, {
                     method: "PUT",
                     body: JSON.stringify({ data: strapiPayload })
                 });
