@@ -39,6 +39,23 @@ export default async function RootLayout({
         };
     }
 
+    // Sync dynamic settings from Strapi so they persist in production on Vercel
+    try {
+        const { getGlobalSettings } = require("@/lib/services/projects");
+        const strapiGlobal = await getGlobalSettings();
+        if (strapiGlobal) {
+            if (!globalData.navbar) globalData.navbar = {};
+            globalData.navbar.siteName = strapiGlobal.siteName || globalData.navbar.siteName;
+
+            if (!globalData.footer) globalData.footer = {};
+            globalData.footer.siteName = strapiGlobal.siteName || globalData.footer.siteName;
+            globalData.footer.contactEmail = strapiGlobal.contactEmail || globalData.footer.contactEmail;
+            globalData.footer.whatsappNumber = strapiGlobal.whatsappNumber || globalData.footer.whatsappNumber;
+        }
+    } catch (e) {
+        console.warn("No se pudieron fusionar los ajustes globales de Strapi:", e);
+    }
+
     const token = cookies().get("admin_token");
     const isAdmin = token?.value === "authenticated";
 

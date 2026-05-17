@@ -20,7 +20,7 @@ export default async function Home() {
     try {
         const extraPath = path.join(process.cwd(), 'src', 'data', 'homepage-extra.json');
         const extraData = JSON.parse(await fs.readFile(extraPath, 'utf-8'));
-        homepageData = { ...homepageData, ...extraData };
+        homepageData = { ...extraData, ...homepageData };
     } catch (e) {
         // Ignorar si no existe el archivo extra
     }

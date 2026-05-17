@@ -36,6 +36,41 @@ export async function PUT(request: Request) {
             console.warn("Fallo al guardar archivo local de global (Vercel):", fsError.message);
         }
 
+        // Sync with Strapi single type 'global' so that settings persist in production
+        const strapiPayload: any = {};
+        if (payload.navbar && payload.navbar.siteName) {
+            strapiPayload.siteName = payload.navbar.siteName;
+        } else if (payload.siteName) {
+            strapiPayload.siteName = payload.siteName;
+        }
+
+        if (payload.footer && payload.footer.contactEmail) {
+            strapiPayload.contactEmail = payload.footer.contactEmail;
+            strapiPayload.whatsappNumber = payload.footer.whatsappNumber;
+        } else {
+            if (payload.contactEmail) strapiPayload.contactEmail = payload.contactEmail;
+            if (payload.whatsappNumber) strapiPayload.whatsappNumber = payload.whatsappNumber;
+        }
+
+        if (Object.keys(strapiPayload).length > 0) {
+            try {
+                const { fetchStrapi } = require("@/lib/strapi");
+                let documentId = "";
+                try {
+                    const getRes = await fetchStrapi("global");
+                    documentId = getRes?.data?.documentId || getRes?.data?.id || "";
+                } catch (e) {}
+
+                const endpoint = documentId ? `global/${documentId}` : "global";
+                await fetchStrapi(endpoint, undefined, {
+                    method: "PUT",
+                    body: JSON.stringify({ data: strapiPayload })
+                });
+            } catch (strapiError: any) {
+                console.error("Error al sincronizar ajustes globales con Strapi:", strapiError.message);
+            }
+        }
+
         revalidatePath("/", "layout");
 
         return NextResponse.json({ success: true });
