@@ -34,8 +34,6 @@ export async function PUT(request: Request) {
             heroCtaLink: data.ctaLink,
             statsYears: Number(data.statsYears),
             statsProjects: Number(data.statsProjects),
-            aboutTitle: data.aboutTitle,
-            aboutContent: data.aboutContent,
             publishedAt: new Date().toISOString(),
         };
 
