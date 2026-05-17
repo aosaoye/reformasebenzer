@@ -26,8 +26,25 @@ export async function PUT(request: Request) {
         const newData = { ...currentData, ...payload };
         
         // For nested objects like navbar, footer, theme:
-        if (payload.navbar) newData.navbar = { ...currentData.navbar, ...payload.navbar };
-        if (payload.footer) newData.footer = { ...currentData.footer, ...payload.footer };
+        if (payload.navbar) {
+            newData.navbar = { ...currentData.navbar, ...payload.navbar };
+        } else if (payload.siteName) {
+            newData.navbar = { ...currentData.navbar, siteName: payload.siteName };
+        }
+
+        if (payload.footer) {
+            newData.footer = { ...currentData.footer, ...payload.footer };
+        } else {
+            newData.footer = {
+                ...currentData.footer,
+                contactEmail: payload.contactEmail !== undefined ? payload.contactEmail : currentData.footer?.contactEmail,
+                whatsappNumber: payload.whatsappNumber !== undefined ? payload.whatsappNumber : currentData.footer?.whatsappNumber,
+                footerTitle: payload.footerTitle !== undefined ? payload.footerTitle : currentData.footer?.footerTitle,
+                address: payload.address !== undefined ? payload.address : currentData.footer?.address,
+                hours: payload.hours !== undefined ? payload.hours : currentData.footer?.hours,
+            };
+        }
+
         if (payload.theme) newData.theme = { ...currentData.theme, ...payload.theme };
 
         try {
@@ -49,9 +66,15 @@ export async function PUT(request: Request) {
         if (payload.footer && payload.footer.contactEmail) {
             strapiPayload.contactEmail = payload.footer.contactEmail;
             strapiPayload.whatsappNumber = payload.footer.whatsappNumber;
+            strapiPayload.footerTitle = payload.footer.footerTitle;
+            strapiPayload.address = payload.footer.address;
+            strapiPayload.hours = payload.footer.hours;
         } else {
             if (payload.contactEmail) strapiPayload.contactEmail = payload.contactEmail;
             if (payload.whatsappNumber) strapiPayload.whatsappNumber = payload.whatsappNumber;
+            if (payload.footerTitle) strapiPayload.footerTitle = payload.footerTitle;
+            if (payload.address) strapiPayload.address = payload.address;
+            if (payload.hours) strapiPayload.hours = payload.hours;
         }
 
         if (Object.keys(strapiPayload).length > 0) {
