@@ -148,7 +148,7 @@ export default function VisualizadorPage() {
                     >
                         <div className="bg-stone-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl p-8 md:p-10 max-w-xl w-full shadow-2xl">
                             <button onClick={() => setStep("intro")} className="text-stone-500 hover:text-white text-[9px] font-black uppercase tracking-widest transition-all mb-6 block">
-                                ← Volver
+                                <ion-icon name="arrow-back-outline" style={{ fontSize: '16px' }}></ion-icon> Volver
                             </button>
 
                             <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.4em] block mb-2">Paso 1 de 3</span>
@@ -201,7 +201,7 @@ export default function VisualizadorPage() {
                                         disabled={uploading}
                                         className="w-full py-4 bg-amber-500 hover:bg-amber-400 disabled:bg-stone-700 text-black disabled:text-stone-400 font-black text-[10px] uppercase tracking-[0.2em] rounded-full transition-all shadow-xl disabled:shadow-none"
                                     >
-                                        {uploading ? uploadProgress : "Subir Vídeo y Continuar →"}
+                                        {uploading ? uploadProgress : <span className="flex items-center gap-2">Subir Vídeo y Continuar <ion-icon name="arrow-forward-outline" style={{ fontSize: '16px' }}></ion-icon></span>}
                                     </button>
                                 </div>
                             )}
@@ -220,7 +220,7 @@ export default function VisualizadorPage() {
                     >
                         <div className="max-w-2xl w-full">
                             <button onClick={() => setStep("upload-video")} className="text-stone-500 hover:text-white text-[9px] font-black uppercase tracking-widest transition-all mb-6 block">
-                                ← Volver
+                                <ion-icon name="arrow-back-outline" style={{ fontSize: '16px' }}></ion-icon> Volver
                             </button>
 
                             <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.4em] block mb-2">Paso 2 de 3</span>
@@ -284,7 +284,7 @@ export default function VisualizadorPage() {
                                     onClick={() => setStep("upload-splat")}
                                     className="px-10 py-4 bg-amber-500 hover:bg-amber-400 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-full shadow-xl transition-all hover:scale-[1.02]"
                                 >
-                                    Subir Modelo 3D Procesado →
+                                    <span className="flex items-center justify-center gap-2">Subir Modelo 3D Procesado <ion-icon name="arrow-forward-outline" style={{ fontSize: '16px' }}></ion-icon></span>
                                 </button>
                             </div>
                         </div>
@@ -302,7 +302,7 @@ export default function VisualizadorPage() {
                     >
                         <div className="bg-stone-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl p-8 md:p-10 max-w-lg w-full shadow-2xl text-center">
                             <button onClick={() => setStep("processing-guide")} className="text-stone-500 hover:text-white text-[9px] font-black uppercase tracking-widest transition-all mb-6 block text-left w-full">
-                                ← Volver
+                                <ion-icon name="arrow-back-outline" style={{ fontSize: '16px' }}></ion-icon> Volver
                             </button>
 
                             <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.4em] block mb-2">Paso 3 de 3</span>

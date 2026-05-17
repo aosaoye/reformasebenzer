@@ -147,3 +147,32 @@ export async function getTestimonials() {
         return [];
     }
 }
+
+export async function getGlobalSettings() {
+    try {
+        const response = await fetchStrapi("global", { populate: "*" }, { next: { revalidate: 60 } });
+        
+        if (!response || !response.data) {
+            return null;
+        }
+
+        const attrs = response.data.attributes || response.data;
+        
+        return {
+            siteName: attrs.siteName || "Ebenzer",
+            topBanner: attrs.topBanner || "Presupuestos sin compromiso | Calidad garantizada en toda España",
+            whatsappNumber: attrs.whatsappNumber || "34600000000",
+            contactEmail: attrs.contactEmail || "info@reformasebenzer.com",
+            socialLinks: {
+                facebook: attrs.facebookUrl,
+                instagram: attrs.instagramUrl,
+                linkedin: attrs.linkedinUrl
+            },
+            logo: getStrapiMedia(attrs.logo?.url)
+        };
+    } catch (error) {
+        console.warn("Could not fetch global settings, using defaults");
+        return null;
+    }
+}
+

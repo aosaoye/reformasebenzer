@@ -4,10 +4,19 @@ import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import ProjectManagerModal from "./ProjectManagerModal";
 
-export default function ProjectCarousel({ projects }: { projects: any[] }) {
+export default function ProjectCarousel({ projects, isAdmin, isEditing }: { projects: any[], isAdmin?: boolean, isEditing?: boolean }) {
     const scrollRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isManagerOpen, setIsManagerOpen] = useState(false);
+
+    // Estado local para los textos de la sección
+    const [localData, setLocalData] = useState({
+        subtitle: "Selección 2026",
+        title1: "Nuestra",
+        title2: "Galería"
+    });
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -30,7 +39,7 @@ export default function ProjectCarousel({ projects }: { projects: any[] }) {
     };
 
     return (
-        <section ref={containerRef} className="py-32 overflow-hidden bg-white relative">
+        <section ref={containerRef} className={`py-32 overflow-hidden relative ${isEditing ? 'bg-stone-50 ring-4 ring-indigo-500 rounded-3xl my-4' : 'bg-white'}`}>
             {/* Cinematic Background Title */}
             <div className="absolute top-0 left-0 w-full overflow-hidden pointer-events-none select-none -translate-y-1/2 md:-translate-y-1/3">
                 <motion.span
@@ -43,42 +52,73 @@ export default function ProjectCarousel({ projects }: { projects: any[] }) {
 
             <div className="relative z-10 mx-auto max-w-7xl px-6">
                 <header className="flex flex-col md:flex-row justify-between items-end mb-20 gap-12">
-                    <div className="max-w-2xl">
-                        <motion.span
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            className="text-[10px] uppercase tracking-[0.6em] font-bold text-stone-400 mb-6 block"
-                        >
-                            Selección 2026
-                        </motion.span>
-                        <motion.h2
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900 uppercase"
-                        >
-                            Nuestra <br />
-                            <span className="text-stone-300 italic font-light">Galería</span>
-                        </motion.h2>
+                    <div className="max-w-2xl w-full">
+                        {isEditing ? (
+                            <>
+                                <label className="text-[10px] text-indigo-600 font-bold uppercase tracking-widest block mb-1">Subtítulo</label>
+                                <input 
+                                    value={localData.subtitle}
+                                    onChange={(e) => setLocalData({...localData, subtitle: e.target.value})}
+                                    className="text-[10px] uppercase tracking-[0.6em] font-bold text-stone-400 mb-6 block w-full bg-white/50 border-b border-indigo-500 focus:outline-none"
+                                />
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-[10px] text-indigo-600 font-bold uppercase tracking-widest block">Título Principal</label>
+                                    <input 
+                                        value={localData.title1}
+                                        onChange={(e) => setLocalData({...localData, title1: e.target.value})}
+                                        className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900 uppercase w-full bg-white/50 border-b border-indigo-500 focus:outline-none p-2"
+                                    />
+                                    <label className="text-[10px] text-indigo-600 font-bold uppercase tracking-widest block">Palabra Destacada (Cursiva)</label>
+                                    <input 
+                                        value={localData.title2}
+                                        onChange={(e) => setLocalData({...localData, title2: e.target.value})}
+                                        className="text-5xl md:text-8xl font-light italic tracking-tighter leading-[0.9] text-stone-300 uppercase w-full bg-white/50 border-b border-indigo-500 focus:outline-none p-2"
+                                    />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <motion.span
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    className="text-[10px] uppercase tracking-[0.6em] font-bold text-stone-400 mb-6 block"
+                                >
+                                    {localData.subtitle}
+                                </motion.span>
+                                <motion.h2
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900 uppercase"
+                                >
+                                    {localData.title1} <br />
+                                    <span className="text-stone-300 italic font-light">{localData.title2}</span>
+                                </motion.h2>
+                            </>
+                        )}
                     </div>
 
                     <div className="flex flex-col items-end gap-8">
+                        {isAdmin && (
+                            <button
+                                onClick={() => setIsManagerOpen(true)}
+                                className="bg-stone-900 text-white px-6 py-2 rounded-full text-[10px] uppercase tracking-widest font-black shadow-lg hover:bg-indigo-600 transition-colors flex items-center gap-2"
+                            >
+                                <span className="flex items-center gap-2"><ion-icon name="settings-outline"></ion-icon> Gestor de Proyectos</span>
+                            </button>
+                        )}
                         <div className="flex items-center gap-6">
                             <button
                                 onClick={() => scroll("left")}
                                 className="group flex items-center justify-center w-16 h-16 border border-stone-200 rounded-full hover:bg-stone-900 hover:text-white transition-all duration-500 active:scale-90"
                             >
-                                <svg className="w-6 h-6 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19l-7-7 7-7" />
-                                </svg>
+                                <ion-icon name="chevron-back-outline" style={{ fontSize: '24px' }} class="transition-transform group-hover:-translate-x-1"></ion-icon>
                             </button>
                             <button
                                 onClick={() => scroll("right")}
                                 className="group flex items-center justify-center w-16 h-16 border border-stone-200 rounded-full hover:bg-stone-900 hover:text-white transition-all duration-500 active:scale-90"
                             >
-                                <svg className="w-6 h-6 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
-                                </svg>
+                                <ion-icon name="chevron-forward-outline" style={{ fontSize: '24px' }} class="transition-transform group-hover:translate-x-1"></ion-icon>
                             </button>
                         </div>
                         <Link
@@ -90,6 +130,12 @@ export default function ProjectCarousel({ projects }: { projects: any[] }) {
                         </Link>
                     </div>
                 </header>
+
+                <ProjectManagerModal 
+                    isOpen={isManagerOpen} 
+                    onClose={() => setIsManagerOpen(false)} 
+                    projects={projects} 
+                />
 
                 <div
                     ref={scrollRef}

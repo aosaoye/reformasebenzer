@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import ProjectCard from "@/components/ProjectCard";
 import Link from "next/link";
 import MediaShowcase from "@/components/MediaShowcase";
+import AdminEditButton from "@/components/AdminEditButton";
 
 export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
     const project = await getProjectById(params.id);
@@ -17,7 +18,8 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
         .slice(0, 3);
 
     return (
-        <main className="px-6 py-12 mx-auto max-w-7xl">
+        <main className="px-6 py-12 mx-auto max-w-7xl relative group">
+            <AdminEditButton collectionType="projects" documentId={project.id} label="Editar Proyecto" />
             {/* Breadcrumb */}
             <nav className="mb-12 text-[10px] uppercase tracking-widest text-stone-400">
                 <Link href="/" className="hover:text-stone-900 transition">Inicio</Link>
@@ -28,10 +30,10 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
             </nav>
 
             <div className="flex flex-col gap-12 mb-24">
-                <MediaShowcase 
-                   images={(project.images || [project.image]).filter((img): img is string => !!img)} 
-                   videos={(project.videos || []).filter((vid): vid is string => !!vid)} 
-                   title={project.name} 
+                <MediaShowcase
+                    images={(project.images || [project.image]).filter((img): img is string => !!img)}
+                    videos={(project.videos || []).filter((vid): vid is string => !!vid)}
+                    title={project.name}
                 />
             </div>
 

@@ -58,8 +58,29 @@ export async function fetchStrapi(
         });
 
         if (!response.ok) {
-            console.error(`Strapi Error [${response.status}]: ${response.statusText}`);
-            throw new Error(`Strapi Request failed`);
+            let errorText = response.statusText;
+            try {
+                const rawText = await response.text();
+                try {
+                    const errorBody = JSON.parse(rawText);
+                    if (errorBody.error && errorBody.error.message) {
+                        errorText = errorBody.error.message;
+                    } else {
+                        errorText = JSON.stringify(errorBody);
+                    }
+                } catch (e) {
+                    errorText = rawText;
+                }
+            } catch (e) {
+                // ignore
+            }
+            // Avoid spamming the console for expected 404s on unconfigured single types
+            if (options.method && options.method !== "GET") {
+                console.error(`Strapi Error [${response.status}] for ${options.method} ${endpoint}: ${errorText}`);
+            } else if (response.status !== 404 || (!endpoint.includes("global") && !endpoint.includes("homepage"))) {
+                console.error(`Strapi Error [${response.status}] for GET ${endpoint}: ${errorText}`);
+            }
+            throw new Error(`Strapi Request failed for ${endpoint}: ${errorText.substring(0, 150)}`);
         }
 
         return await response.json();

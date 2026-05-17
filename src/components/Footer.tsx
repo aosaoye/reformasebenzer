@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useAdmin } from "@/context/AdminContext";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
@@ -10,7 +11,12 @@ if (typeof window !== "undefined") {
     gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function Footer() {
+export default function Footer({ settings, isAdmin }: { settings?: any, isAdmin?: boolean }) {
+    const { isEditing, setIsEditing } = useAdmin();
+    const siteName = settings?.siteName || "EBENZER";
+    const initialEmail = settings?.contactEmail || "rfebenezer.sl@gmail.com";
+    const initialPhone = settings?.whatsappNumber || "+34 643 640 502";
+
     const footerRef = useRef<HTMLElement>(null);
     const brandTextRef = useRef<HTMLSpanElement>(null);
     const [email, setEmail] = useState("");
@@ -19,6 +25,35 @@ export default function Footer() {
         success?: boolean;
         message?: string;
     }>({ loading: false });
+
+    const [localData, setLocalData] = useState({
+        contactEmail: settings?.contactEmail || initialEmail,
+        whatsappNumber: settings?.whatsappNumber || initialPhone,
+        footerTitle: settings?.footerTitle || "Hablemos de<br />tu <span class=\"text-stone-300 italic font-light\">futuro.</span>",
+        address: settings?.address || "Av. de la Innovación 45,<br />28000 Madrid,<br />España",
+        hours: settings?.hours || "Horario: 09h - 18h",
+    });
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSaveGlobal = async () => {
+        setIsSaving(true);
+        try {
+            const res = await fetch("/api/admin/save-global", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(localData)
+            });
+            if (res.ok) {
+                alert("Ajustes globales (Footer) guardados.");
+            } else {
+                alert("Error al guardar en CMS");
+            }
+        } catch(e) {
+            alert("Error de conexión");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const handleSubscribe = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -78,36 +113,70 @@ export default function Footer() {
                     className="brand-bg-text text-[45vw] font-black text-stone-200/40 leading-none block whitespace-nowrap tracking-tighter uppercase translate-y-1/4"
                     style={{ opacity: 0.6 }}
                 >
-                    EBENZER EBENZER EBENZER
+                    {siteName} {siteName} {siteName}
                 </span>
             </div>
 
             <div className="relative z-10 px-6 mx-auto max-w-7xl">
                 <div className="grid grid-cols-12 mb-40 gap-y-20 md:gap-x-24">
                     <div className="col-span-12 lg:col-span-6">
-                        <motion.span
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            className="text-[10px] uppercase tracking-[0.6em] font-black text-stone-400 mb-10 block"
-                        >
-                            Conecta con nosotros
-                        </motion.span>
-                        <h2 className="mb-16 text-5xl md:text-8xl font-black leading-[0.85] tracking-tighter text-stone-900 uppercase">
-                            Hablemos de <br />tu <span className="text-stone-300 italic font-light">futuro.</span>
-                        </h2>
+                        <div className="flex items-center gap-4 mb-10">
+                            <motion.span
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                className="text-[10px] uppercase tracking-[0.6em] font-black text-stone-400 block"
+                            >
+                                Conecta con nosotros
+                            </motion.span>
+                            {isEditing && (
+                                <button onClick={handleSaveGlobal} disabled={isSaving} className="text-[9px] uppercase font-black tracking-widest px-3 py-1 rounded-full bg-emerald-500 text-white hover:bg-emerald-400 ml-4 absolute left-full top-0 w-max">
+                                    {isSaving ? "Guardando..." : "Guardar Footer"}
+                                </button>
+                            )}
+                            
+                        </div>
+                        {isEditing ? (
+                            <textarea 
+                                value={localData.footerTitle.replace(/<br \/>/g, '\n').replace(/<span.*?>/g, '').replace(/<\/span>/g, '')}
+                                onChange={(e) => setLocalData({...localData, footerTitle: e.target.value.replace(/\n/g, '<br />')})}
+                                className="mb-16 w-full text-5xl md:text-8xl font-black leading-[0.85] tracking-tighter text-stone-900 uppercase bg-stone-100 p-4 rounded-xl"
+                                rows={3}
+                            />
+                        ) : (
+                            <h2 
+                                className="mb-16 text-5xl md:text-8xl font-black leading-[0.85] tracking-tighter text-stone-900 uppercase"
+                                dangerouslySetInnerHTML={{ __html: localData.footerTitle }}
+                            />
+                        )}
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 text-left mb-20">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 text-left mb-20 relative z-20">
                             <div className="flex flex-col gap-6">
                                 <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400">Email</h4>
-                                <a href="mailto:rfebenezer.sl@gmail.com" className="text-xl font-medium text-stone-900 transition hover:opacity-50 break-words underline underline-offset-[12px] decoration-stone-200">
-                                    rfebenezer.sl@gmail.com
-                                </a>
+                                {isEditing ? (
+                                    <input 
+                                        value={localData.contactEmail}
+                                        onChange={(e) => setLocalData({...localData, contactEmail: e.target.value})}
+                                        className="text-xl font-medium text-stone-900 bg-stone-100 border-b border-indigo-500 focus:outline-none px-2 w-full"
+                                    />
+                                ) : (
+                                    <a href={`mailto:${localData.contactEmail}`} className="text-xl font-medium text-stone-900 transition hover:opacity-50 break-words underline underline-offset-[12px] decoration-stone-200">
+                                        {localData.contactEmail}
+                                    </a>
+                                )}
                             </div>
                             <div className="flex flex-col gap-6">
                                 <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400">Teléfono</h4>
-                                <a href="tel:+34643640502" className="text-xl font-medium text-stone-900 transition hover:opacity-50 underline underline-offset-[12px] decoration-stone-200">
-                                    +34 643 640 502
-                                </a>
+                                {isEditing ? (
+                                    <input 
+                                        value={localData.whatsappNumber}
+                                        onChange={(e) => setLocalData({...localData, whatsappNumber: e.target.value})}
+                                        className="text-xl font-medium text-stone-900 bg-stone-100 border-b border-indigo-500 focus:outline-none px-2 w-full"
+                                    />
+                                ) : (
+                                    <a href={`tel:${localData.whatsappNumber.replace(/\s/g, '')}`} className="text-xl font-medium text-stone-900 transition hover:opacity-50 underline underline-offset-[12px] decoration-stone-200">
+                                        {localData.whatsappNumber}
+                                    </a>
+                                )}
                             </div>
                         </div>
 
@@ -175,8 +244,28 @@ export default function Footer() {
                             <div className="flex flex-col gap-10">
                                 <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400">Atención</h4>
                                 <ul className="flex flex-col gap-5 text-sm font-medium text-stone-500">
-                                    <li className="leading-[2]">Av. de la Innovación 45,<br />28000 Madrid,<br />España</li>
-                                    <li className="pt-6 font-black text-stone-900 text-[10px] tracking-[0.2em] uppercase">Horario: 09h - 18h</li>
+                                    {isEditing ? (
+                                        <div className="flex flex-col gap-2 relative z-50">
+                                            <textarea 
+                                                value={localData.address.replace(/<br \/>/g, '\n')}
+                                                onChange={(e) => setLocalData({...localData, address: e.target.value.replace(/\n/g, '<br />')})}
+                                                className="bg-stone-200 text-stone-900 w-full p-2 text-xs rounded border border-indigo-500 focus:outline-none"
+                                                rows={3}
+                                                placeholder="Dirección"
+                                            />
+                                            <input 
+                                                value={localData.hours}
+                                                onChange={(e) => setLocalData({...localData, hours: e.target.value})}
+                                                className="bg-stone-200 text-stone-900 w-full p-2 text-xs rounded border border-indigo-500 focus:outline-none font-bold"
+                                                placeholder="Horario"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <li className="leading-[2]" dangerouslySetInnerHTML={{ __html: localData.address }} />
+                                            <li className="pt-6 font-black text-stone-900 text-[10px] tracking-[0.2em] uppercase">{localData.hours}</li>
+                                        </>
+                                    )}
                                 </ul>
                             </div>
                         </div>

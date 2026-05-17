@@ -1,0 +1,66 @@
+{
+    "header": {
+        "tag": "Nuestros Servicios",
+        "title1": "Somos expertos",
+        "titleHighlight": "transformando",
+        "title2": " espacios",
+        "description": "Ofrecemos soluciones constructivas de alta calidad adaptadas a cada necesidad, garantizando siempre la excelencia en los acabados."
+    },
+    "services": [
+        {
+            "id": "s1",
+            "title": "Reformas Integrales",
+            "description": "Transformamos viviendas completas coordinando todos los gremios. Desde la redistribución de tabiques hasta el último detalle decorativo, nos encargamos de todo para que no tengas que preocuparte por nada.",
+            "image": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1000",
+            "features": [
+                "Arquitectura técnica",
+                "Gestión de licencias",
+                "Interiorismo",
+                "Llave en mano"
+            ]
+        },
+        {
+            "id": "s2",
+            "title": "Cocinas de Diseño",
+            "description": "El corazón de tu hogar merece lo mejor. Creamos cocinas funcionales y estéticas, utilizando materiales de alta gama y electrodomésticos de última generación que se adaptan a tu ritmo de vida.",
+            "image": "https://images.pexels.com/photos/6186826/pexels-photo-6186826.jpeg",
+            "features": [
+                "Mobiliario a medida",
+                "Encimeras premium",
+                "Iluminación integrada",
+                "Optimización de espacio"
+            ]
+        },
+        {
+            "id": "s3",
+            "title": "Baños y Spa",
+            "description": "Convertimos tu baño en un espacio de desconexión y bienestar. Especialistas en platos de ducha a ras de suelo, saneamientos suspendidos y revestimientos de gran formato.",
+            "image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1000",
+            "features": [
+                "Grifería termostática",
+                "Mamparas a medida",
+                "Impermeabilización total",
+                "Acabados de lujo"
+            ]
+        },
+        {
+            "id": "s4",
+            "title": "Espacios Comerciales",
+            "description": "Ayudamos a que tu negocio destaque. Reformamos locales comerciales, oficinas y restaurantes enfocados en la experiencia del cliente y la eficiencia operativa de tu marca.",
+            "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1000",
+            "features": [
+                "Imagen corporativa",
+                "Normativa técnica",
+                "Mantenimiento",
+                "Diseño funcional"
+            ]
+        }
+    ],
+    "cta": {
+        "title1": "¿Empezamos con ",
+        "titleHighlight": "tu proyecto?",
+        "description": "Cuéntanos tu idea y nuestro equipo de arquitectos e interioristas te asesorará para hacerla realidad con la mayor garantía.",
+        "button": "Pide tu Presupuesto",
+        "link": "/contact"
+    }
+}

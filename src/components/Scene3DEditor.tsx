@@ -166,7 +166,7 @@ export default function Scene3DEditor({ splatUrl, videoPreviewUrl, onClose }: Sc
                                 El archivo .splat no se ha podido leer. Asegúrate de que se ha exportado correctamente desde Luma AI, Polycam o Nerfstudio.
                             </p>
                             <button onClick={onClose} className="px-8 py-3 bg-white text-black font-black text-[9px] uppercase tracking-widest rounded-full hover:scale-105 transition-transform">
-                                ← Intentar de nuevo
+                                <ion-icon name="arrow-back-outline" style={{ fontSize: '16px' }}></ion-icon> Intentar de nuevo
                             </button>
                         </div>
                     </div>

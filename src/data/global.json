@@ -1,0 +1,18 @@
+{
+    "navbar": {
+        "siteName": "Ebenzer",
+        "layout": "default",
+        "showCta": true
+    },
+    "footer": {
+        "tagline": "Construyendo el futuro de la arquitectura",
+        "email": "hola@ebenzer.com",
+        "phone": "+34 900 123 456",
+        "address": "Paseo de la Castellana 123, Madrid",
+        "facebook": "https://facebook.com",
+        "instagram": "https://instagram.com"
+    },
+    "theme": {
+        "borderRadius": "xl"
+    }
+}

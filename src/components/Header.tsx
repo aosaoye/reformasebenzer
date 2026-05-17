@@ -1,13 +1,38 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAdmin } from "@/context/AdminContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Header() {
+export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?: boolean }) {
+    const { isEditing, setIsEditing } = useAdmin();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+        const [localSettings, setLocalSettings] = useState(settings || { siteName: "Ebenzer", layout: "default" });
+    const [isSaving, setIsSaving] = useState(false);
     const pathname = usePathname();
+
+    const handleSaveGlobal = async () => {
+        setIsSaving(true);
+        try {
+            const res = await fetch("/api/admin/save-global", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ navbar: localSettings })
+            });
+            if (res.ok) {
+
+                alert("Ajustes globales (Navbar) guardados.");
+            } else {
+                alert("Error al guardar en CMS");
+            }
+        } catch(e) {
+            alert("Error de conexión");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const navLinks = [
         { name: "Inicio", href: "/" },
@@ -24,22 +49,13 @@ export default function Header() {
         setIsDrawerOpen(false);
     }, [pathname]);
 
-    // Internal SVG Icons to avoid issues
-    const Icons = {
-        Home: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>,
-        Projects: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>,
-        Visor: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>,
-        Services: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>,
-        Contact: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
-    }
-
     const getIcon = (name: string) => {
         switch (name) {
-            case "Inicio": return <Icons.Home />;
-            case "Proyectos": return <Icons.Projects />;
-            case "Visor 3D": return <Icons.Visor />;
-            case "Servicios": return <Icons.Services />;
-            case "Contacto": return <Icons.Contact />;
+            case "Inicio": return <ion-icon name="home-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
+            case "Proyectos": return <ion-icon name="briefcase-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
+            case "Visor 3D": return <ion-icon name="cube-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
+            case "Servicios": return <ion-icon name="construct-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
+            case "Contacto": return <ion-icon name="mail-outline" style={{ fontSize: '20px', color: '#1c1917' }}></ion-icon>;
             default: return null;
         }
     }
@@ -72,13 +88,44 @@ export default function Header() {
                         />
                     </button>
 
-                    {/* Logo */}
-                    <Link href="/" className="text-xl md:text-2xl italic font-black tracking-tighter text-stone-900 uppercase">
-                        Ebenzer
-                    </Link>
+                    {/* Logo and Admin Toggle */}
+                    <div className={`flex items-center gap-4 ${localSettings.layout === 'center' ? 'w-full justify-center absolute inset-0 pointer-events-none z-10' : ''}`}>
+                        <div className="pointer-events-auto flex items-center gap-4">
+                        {isEditing ? (
+                            <div className="flex flex-col gap-2">
+                                <input 
+                                    value={localSettings.siteName}
+                                    onChange={(e) => setLocalSettings({...localSettings, siteName: e.target.value})}
+                                    className="text-xl md:text-2xl italic font-black tracking-tighter text-stone-900 uppercase bg-stone-100 border-b border-indigo-500 focus:outline-none px-2 w-32 md:w-48"
+                                    placeholder="Nombre del sitio"
+                                />
+                                <select 
+                                    value={localSettings.layout} 
+                                    onChange={(e) => setLocalSettings({...localSettings, layout: e.target.value})}
+                                    className="text-[10px] uppercase font-bold p-1 bg-stone-200 rounded text-stone-900 focus:outline-none"
+                                >
+                                    <option value="default">Logo Izquierda</option>
+                                    <option value="center">Logo Centro</option>
+                                    <option value="minimal">Minimalista</option>
+                                </select>
+                            {isEditing && (
+                            <button onClick={handleSaveGlobal} disabled={isSaving} className="text-[9px] uppercase font-black tracking-widest px-3 py-1 rounded-full bg-emerald-500 text-white hover:bg-emerald-400 ml-2">
+                                {isSaving ? "..." : "Guardar"}
+                            </button>
+                        )}
+                        </div>
+                        ) : (
+                            <Link href="/" className="text-xl md:text-2xl italic font-black tracking-tighter text-stone-900 uppercase">
+                                {localSettings.siteName}
+                            </Link>
+                        )}
+                        </div>
+                        
+                    </div>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:block">
+                    {localSettings.layout !== 'minimal' && (
+                    <nav className={`hidden md:block ${localSettings.layout === 'center' ? 'order-first' : ''}`}>
                         <ul className="flex gap-10 text-[10px] font-bold tracking-[0.2em] uppercase text-stone-400">
                             {navLinks.map((link) => (
                                 <li key={link.href}>
@@ -98,6 +145,7 @@ export default function Header() {
                             ))}
                         </ul>
                     </nav>
+                    )}
 
                     {/* Spacer/CTA */}
                     <div className="hidden md:block">
@@ -130,7 +178,7 @@ export default function Header() {
                             className="fixed inset-y-0 left-0 z-[102] w-full max-w-sm bg-stone-50 shadow-2xl overflow-hidden flex flex-col"
                         >
                             <div className="p-8 pb-4 flex items-center justify-between border-b border-stone-200/50 bg-white">
-                                <span className="text-xl font-black italic tracking-tighter">EBENZER</span>
+                                <span className="text-xl font-black italic tracking-tighter uppercase">{localSettings.siteName}</span>
                                 <button onClick={toggleDrawer} className="p-2 text-stone-400 hover:text-stone-900 transition-colors">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -161,6 +209,7 @@ export default function Header() {
                                     ))}
                                 </ul>
                             </nav>
+
 
                             <div className="p-8 bg-stone-100/50 border-t border-stone-200/50">
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-4">Redes Sociales</p>

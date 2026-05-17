@@ -159,7 +159,7 @@ export default function ARStudio({ imageUrl, onClose }: { imageUrl: string, onCl
             <div className="absolute top-0 left-0 right-0 z-[1100] p-6 flex items-center justify-between bg-gradient-to-b from-black/95 to-transparent">
                 <div className="flex items-center gap-6">
                     <button onClick={onClose} className="bg-white/10 hover:bg-white hover:text-black text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all backdrop-blur-md border border-white/10">
-                        ← Salir
+                        <ion-icon name="arrow-back-outline" style={{ fontSize: '16px' }}></ion-icon> Salir
                     </button>
                     <div>
                         <h2 className="text-white text-xl font-bold tracking-tighter uppercase italic leading-none">Ebenzer AR Studio</h2>

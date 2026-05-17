@@ -249,12 +249,12 @@ export default function ImmersiveViewer({ imageUrl, onClose }: { imageUrl: strin
                 {/* Navigation Guide */}
                 <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-8 px-10 py-5 bg-black/60 backdrop-blur-3xl rounded-full border border-white/10 text-white/80 pointer-events-none">
                     <div className="flex items-center gap-3">
-                        <span className="text-xl">👉</span>
+                        <ion-icon name="hand-right-outline" style={{ fontSize: '20px' }}></ion-icon>
                         <span className="text-[9px] uppercase font-black tracking-widest">Arrastra para girar</span>
                     </div>
                     <div className="w-[1px] h-4 bg-white/20"></div>
                     <div className="flex items-center gap-3">
-                        <span className="text-xl">🎯</span>
+                        <ion-icon name="disc-outline" style={{ fontSize: '20px' }}></ion-icon>
                         <span className="text-[9px] uppercase font-black tracking-widest">Clica en los círculos para moverte</span>
                     </div>
                 </div>
