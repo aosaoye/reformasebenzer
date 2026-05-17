@@ -40,7 +40,7 @@ export async function getAllProjects(categorySlug?: string) {
         }
 
         // Fetch from Strapi 5
-        const response = await fetchStrapi("projects", query, { next: { revalidate: 60 } });
+        const response = await fetchStrapi("projects", query, { cache: "no-store" });
         
         if (!response || !response.data) {
              return mockProjects;
@@ -90,7 +90,7 @@ export async function getAllProjects(categorySlug?: string) {
 
 export async function getProjectById(id: string) {
     try {
-        const response = await fetchStrapi(`projects/${id}`, { populate: "*" }, { next: { revalidate: 60 } });
+        const response = await fetchStrapi(`projects/${id}`, { populate: "*" }, { cache: "no-store" });
         
         if (!response || !response.data) {
              return mockProjects.find(p => p.id.toString() === id) || null;
@@ -148,7 +148,7 @@ export async function getProjectById(id: string) {
 
 export async function getHomePage() {
     try {
-        const response = await fetchStrapi("homepage", { populate: "*" }, { next: { revalidate: 60 } });
+        const response = await fetchStrapi("homepage", { populate: "*" }, { cache: "no-store" });
         
         if (!response || !response.data) {
              return null;
@@ -199,7 +199,7 @@ export async function getTestimonials() {
 
 export async function getGlobalSettings() {
     try {
-        const response = await fetchStrapi("global", { populate: "*" }, { next: { revalidate: 60 } });
+        const response = await fetchStrapi("global", { populate: "*" }, { cache: "no-store" });
         
         if (!response || !response.data) {
             return null;

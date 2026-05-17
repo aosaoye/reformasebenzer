@@ -17,7 +17,7 @@ export async function getAllTestimonials() {
             filters: {
                 // Ensure we only show approved/published items (Strapi handles this automatically generally)
             }
-        }, { next: { revalidate: 60 } });
+        }, { cache: "no-store" });
 
         if (!response || !response.data) return [];
 
