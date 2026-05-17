@@ -32,6 +32,12 @@ export function AdminProvider({ children, isAdmin }: { children: React.ReactNode
     };
 
     const handleLogout = async () => {
+        if (isEditing) {
+            const confirmLogout = window.confirm(
+                "¡Atención! Tienes el Modo Edición activo. Si cierras sesión ahora, se perderán todos los cambios que no hayas guardado con el botón 'Guardar'.\n\n¿Estás seguro de que quieres salir sin guardar?"
+            );
+            if (!confirmLogout) return;
+        }
         try {
             await fetch("/api/admin/logout", { method: "POST" });
             localStorage.removeItem("eb_is_editing");
