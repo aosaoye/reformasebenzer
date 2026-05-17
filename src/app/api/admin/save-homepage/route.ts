@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 
 export async function PUT(request: Request) {
     try {
-        // Verificamos que el usuario es un administrador autenticado
         const token = cookies().get("admin_token");
         if (!token || token.value !== "authenticated") {
             return NextResponse.json({ success: false, message: "No autorizado" }, { status: 401 });
@@ -43,6 +42,8 @@ export async function PUT(request: Request) {
 
         const method = "PUT";
         const endpoint = "homepage";
+
+        console.log("Payload:", strapiPayload);
 
         try {
             const response = await fetchStrapi(endpoint, undefined, {
