@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Link from "next/link";
 import { Project } from "@/lib/data";
 
@@ -6,14 +7,20 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+    const defaultFallback = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop";
+    const [imgSrc, setImgSrc] = useState(project.image || defaultFallback);
+
     return (
         <Link href={`/proyectos/${project.id}`} className="block h-full cursor-pointer group project-card">
             <div className="relative mb-3 overflow-hidden bg-stone-50 aspect-[4/3] w-full">
                 <img
-                    src={project.image}
+                    src={imgSrc}
                     className="object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                     alt={project.name}
                     loading="lazy"
+                    onError={() => {
+                        setImgSrc(defaultFallback);
+                    }}
                 />
             </div>
             

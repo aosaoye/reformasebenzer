@@ -152,20 +152,36 @@ export default function ProjectCarousel({ projects, isAdmin, isEditing }: { proj
                         viewport={{ once: true }}
                         className="min-w-[85vw] sm:min-w-[45vw] lg:min-w-[30vw] snap-start"
                     >
-                        <Link href={`/proyectos/${project.id}`} className="block">
-                            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-stone-100 group shadow-sm">
-                                <Image
-                                    src={project.image}
-                                    className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-102"
-                                    alt=""
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                />
-                            </div>
-                        </Link>
+                        <CarouselCard project={project} />
                     </motion.div>
                 ))}
             </div>
         </section>
+    );
+}
+
+function CarouselCard({ project }: { project: any }) {
+    const defaultFallback = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop";
+    const [imgSrc, setImgSrc] = useState(project.image || defaultFallback);
+
+    useEffect(() => {
+        setImgSrc(project.image || defaultFallback);
+    }, [project.image]);
+
+    return (
+        <Link href={`/proyectos/${project.id}`} className="block">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-stone-100 group shadow-sm">
+                <Image
+                    src={imgSrc}
+                    className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-102"
+                    alt=""
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={() => {
+                        setImgSrc(defaultFallback);
+                    }}
+                />
+            </div>
+        </Link>
     );
 }
