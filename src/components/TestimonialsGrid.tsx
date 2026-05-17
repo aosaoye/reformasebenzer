@@ -55,9 +55,9 @@ export default function TestimonialsGrid({ initialTestimonials = [] }: { initial
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
                 <div>
                     <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-stone-400 block mb-4">Opiniones Reales</span>
-                    <h2 className="text-4xl md:text-6xl font-light tracking-tighter text-stone-900">
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900 uppercase">
                         Voces de <br/>
-                        <span className="font-black italic">satisfacción.</span>
+                        <span className="text-stone-300 italic font-light">satisfacción.</span>
                     </h2>
                 </div>
                 <button 

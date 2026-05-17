@@ -77,7 +77,7 @@ export default function ProjectsClient({
     return (
         <main className="px-8 py-16 mt-20 mx-auto max-w-[1400px] animate-in fade-in duration-700 relative bg-white">
             <header className="flex items-baseline justify-between gap-4 mb-8 pb-4 border-b border-stone-100">
-                <div className={`max-w-xl ${isEditing ? 'ring-4 ring-indigo-500/50 p-4 rounded-3xl' : ''}`}>
+                <div className={`max-w-xl ${isEditing ? 'ring-4 ring-indigo-500/50 p-4 rounded-md' : ''}`}>
                     {isEditing ? (
                         <textarea 
                             value={localData.title} 

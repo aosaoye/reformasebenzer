@@ -115,7 +115,7 @@ export default function ServicesClient({ initialData, isAdmin = false }: { initi
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-10 text-stone-900"
+                        className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-10 text-stone-900 uppercase"
                     >
                         {localData.header.title1} <span className="text-stone-300 italic font-light">{localData.header.titleHighlight}</span>{localData.header.title2}
                     </motion.h2>
@@ -264,8 +264,8 @@ export default function ServicesClient({ initialData, isAdmin = false }: { initi
                 className={`mt-48 py-32 bg-stone-900 text-white rounded-[3rem] px-8 md:px-24 text-center relative overflow-hidden ${isEditing ? 'ring-4 ring-indigo-500' : ''}`}
             >
                 <div className="relative z-10">
-                    <h2 className="text-4xl md:text-7xl font-light tracking-tighter mb-12">
-                        {localData.cta.title1} <br /><span className="italic font-black">{localData.cta.titleHighlight}</span>
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-white uppercase mb-12">
+                        {localData.cta.title1} <br /><span className="text-stone-300 italic font-light">{localData.cta.titleHighlight}</span>
                     </h2>
                     <p className="text-stone-400 text-xl mb-16 max-w-2xl mx-auto font-light leading-relaxed">{localData.cta.description}</p>
                     <Link href={localData.cta.link} className="inline-block bg-white text-stone-900 px-12 py-6 rounded-full font-bold uppercase text-[10px] tracking-[0.3em] hover:bg-stone-100 transition shadow-2xl hover:scale-105 transform">{localData.cta.button}</Link>
