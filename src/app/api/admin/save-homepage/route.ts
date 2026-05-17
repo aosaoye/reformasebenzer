@@ -13,20 +13,7 @@ export async function PUT(request: Request) {
 
         const data = await request.json();
 
-        // 1. Fetch current data to know if it exists and get documentId
-        let documentExists = false;
-        let documentId = null;
-        try {
-            const currentDataResponse = await fetchStrapi("homepage", { populate: "*" }, { cache: "no-store" });
-            if (currentDataResponse?.data) {
-                documentExists = true;
-                documentId = currentDataResponse.data.documentId;
-            }
-        } catch (e) {
-            console.log("No previous homepage data found, proceeding with empty defaults.");
-        }
-
-        // 2. Prepare payload (only fields we want to update to avoid relations validation errors)
+        // 1. Prepare payload (only fields we want to update to avoid relations validation errors)
         const strapiPayload: any = {
             heroTitle: data.heroTitle,
             heroSubtitle: data.heroSubtitle,
@@ -54,7 +41,7 @@ export async function PUT(request: Request) {
             console.warn("Fallo al guardar archivo local (probablemente en producción/Vercel):", fsError.message);
         }
 
-        const method = documentExists ? "PUT" : "POST";
+        const method = "PUT";
         const endpoint = "homepage";
 
         try {
