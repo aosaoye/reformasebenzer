@@ -75,71 +75,54 @@ export default function ProjectsClient({
     };
 
     return (
-        <main className="px-6 py-12 mx-auto max-w-7xl animate-in fade-in duration-700 relative">
-            <header className="flex flex-col items-baseline justify-between gap-4 mb-20 md:flex-row relative group">
+        <main className="px-8 py-16 mx-auto max-w-[1400px] animate-in fade-in duration-700 relative bg-white">
+            <header className="flex items-baseline justify-between gap-4 mb-8 pb-4 border-b border-stone-100">
                 <div className={`max-w-xl ${isEditing ? 'ring-4 ring-indigo-500/50 p-4 rounded-3xl' : ''}`}>
                     {isEditing ? (
-                        <>
-                            <input 
-                                value={localData.subtitle} 
-                                onChange={(e) => handleUpdate("subtitle", e.target.value)}
-                                className="w-full text-[10px] uppercase font-black text-stone-400 tracking-[0.4em] block mb-4 bg-transparent border-b border-indigo-500 focus:outline-none"
-                            />
-                            <textarea 
-                                value={localData.title} 
-                                onChange={(e) => handleUpdate("title", e.target.value)}
-                                className="w-full text-5xl font-light tracking-tighter md:text-8xl bg-transparent border-b border-indigo-500 focus:outline-none"
-                                rows={2}
-                            />
-                        </>
+                        <textarea 
+                            value={localData.title} 
+                            onChange={(e) => handleUpdate("title", e.target.value)}
+                            className="w-full text-4xl font-bold tracking-tight bg-transparent border-b border-indigo-500 focus:outline-none"
+                            rows={1}
+                        />
                     ) : (
-                        <>
-                            <span className="text-[10px] uppercase font-black text-stone-400 tracking-[0.4em] block mb-4">
-                                {localData.subtitle}
-                            </span>
-                            <h2 
-                                className="text-5xl font-light tracking-tighter md:text-8xl"
-                                dangerouslySetInnerHTML={{ __html: localData.title }}
-                            />
-                        </>
+                        <h2 className="text-4xl font-bold tracking-tight text-stone-900">
+                            {localData.title}
+                        </h2>
                     )}
                 </div>
-                <span className="text-[10px] font-black tracking-[0.4em] uppercase text-stone-400 mt-6">
-                    {projects.length} Proyectos • Selección 2026
+                <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-stone-400">
+                    {projects.length} RESULTADOS
                 </span>
             </header>
 
-            <div className="flex flex-col gap-16 lg:flex-row">
-                {/* Sidebar */}
-                <aside className="lg:w-64 shrink-0">
-                    <CategoryFilter />
-                </aside>
+            {/* Horizontal Filter Pill Bar */}
+            <CategoryFilter />
 
-                {/* Grid */}
-                <div className="flex-1">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
-                        {projects.map((project: any, index: number) => (
-                            <div key={project.id} className={`relative group ${isEditing ? 'ring-2 ring-indigo-500/20 p-2 rounded-3xl' : ''}`}>
-                                <ProjectCard project={project} />
-                                {isEditing && (
-                                    <div className="absolute top-4 right-4 z-[90] flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity bg-stone-900/90 backdrop-blur p-2 rounded-xl shadow-2xl">
-                                        <button onClick={() => handleMoveProject(index, -1)} disabled={index === 0} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-stone-700 text-white disabled:opacity-30">
-                                            <ion-icon name="arrow-back-outline"></ion-icon>
-                                        </button>
-                                        <button onClick={() => handleMoveProject(index, 1)} disabled={index === projects.length - 1} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-stone-700 text-white disabled:opacity-30">
-                                            <ion-icon name="arrow-forward-outline"></ion-icon>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                    {projects.length === 0 && (
-                        <div className="py-20 text-center text-stone-500">
-                            No hay proyectos que coincidan con esta selección.
+            {/* Full Width Grid */}
+            <div className="w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
+                    {projects.map((project: any, index: number) => (
+                        <div key={project.id} className={`relative group ${isEditing ? 'ring-2 ring-indigo-500/20 p-2 rounded-xl' : ''}`}>
+                            <ProjectCard project={project} />
+                            {isEditing && (
+                                <div className="absolute top-4 left-4 z-[90] flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity bg-stone-900/90 backdrop-blur p-2 rounded-xl shadow-2xl">
+                                    <button onClick={() => handleMoveProject(index, -1)} disabled={index === 0} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-stone-700 text-white disabled:opacity-30">
+                                        <ion-icon name="arrow-back-outline"></ion-icon>
+                                    </button>
+                                    <button onClick={() => handleMoveProject(index, 1)} disabled={index === projects.length - 1} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-stone-700 text-white disabled:opacity-30">
+                                        <ion-icon name="arrow-forward-outline"></ion-icon>
+                                    </button>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    ))}
                 </div>
+                {projects.length === 0 && (
+                    <div className="py-20 text-center text-stone-500 text-sm">
+                        No hay proyectos que coincidan con esta selección.
+                    </div>
+                )}
             </div>
 
             {isEditing && (

@@ -8,7 +8,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["var(--font-plus-jakarta-sans)", "sans-serif"],
+                sans: ["var(--font-geist)", "sans-serif"],
             },
             colors: {
                 stone: {

@@ -2,7 +2,14 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-const categories = ["Todos", "Reformas Integrales", "Cocinas", "Baños", "Espacios Comerciales", "Interiorismo"];
+const categories = [
+    { label: "TODOS LOS PROYECTOS", value: "Todos" },
+    { label: "REFORMAS INTEGRALES", value: "Reformas Integrales" },
+    { label: "COCINAS", value: "Cocinas" },
+    { label: "BAÑOS", value: "Baños" },
+    { label: "COMERCIAL", value: "Espacios Comerciales" },
+    { label: "INTERIORISMO", value: "Interiorismo" }
+];
 
 export default function CategoryFilter() {
     const router = useRouter();
@@ -20,27 +27,22 @@ export default function CategoryFilter() {
     };
 
     return (
-        <aside className="w-full lg:w-64">
-            <div className="sticky top-32">
-                <h3 className="mb-8 text-[10px] font-bold tracking-[0.3em] uppercase text-stone-900 border-b border-stone-100 pb-2">
-                    Categorías
-                </h3>
-                <ul className="space-y-4">
-                    {categories.map((cat) => (
-                        <li key={cat}>
-                            <button
-                                onClick={() => handleCategoryClick(cat)}
-                                className={`text-xs uppercase tracking-widest transition-all hover:translate-x-1 ${activeCategory === cat
-                                    ? "text-stone-900 font-bold"
-                                    : "text-stone-400 hover:text-stone-900"
-                                    }`}
-                            >
-                                {cat}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+        <div className="w-full mb-12">
+            <div className="flex flex-wrap gap-3">
+                {categories.map((cat) => (
+                    <button
+                        key={cat.value}
+                        onClick={() => handleCategoryClick(cat.value)}
+                        className={`text-[10px] tracking-[0.15em] font-bold px-5 py-2.5 rounded-full transition-all duration-300 ${
+                            activeCategory === cat.value
+                                ? "bg-stone-900 text-white border border-stone-900"
+                                : "bg-transparent border border-stone-200 text-stone-500 hover:text-stone-900 hover:border-stone-900"
+                        }`}
+                    >
+                        {cat.label}
+                    </button>
+                ))}
             </div>
-        </aside>
+        </div>
     );
 }

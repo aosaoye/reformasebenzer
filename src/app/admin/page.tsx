@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function AdminLogin() {
+    const [email, setEmail] = useState("admin@ebenzer.com");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -26,9 +28,9 @@ export default function AdminLogin() {
 
             if (data.success) {
                 router.push("/?edit=true");
-                router.refresh(); // Force refresh to re-evaluate the server cookie
+                router.refresh();
             } else {
-                setError(data.message || "Error al autenticar");
+                setError(data.message || "Contraseña incorrecta");
             }
         } catch (err) {
             setError("Error de red");
@@ -38,46 +40,106 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen bg-stone-900 flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background blur effects */}
-            <div className="absolute w-[500px] h-[500px] bg-stone-800 blur-[120px] rounded-full -top-40 -left-40 opacity-50"></div>
-            <div className="absolute w-[400px] h-[400px] bg-stone-700 blur-[100px] rounded-full bottom-0 right-0 opacity-30"></div>
-
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-stone-800/40 backdrop-blur-2xl border border-stone-700/50 p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md relative z-10"
-            >
-                <div className="text-center mb-10">
-                    <span className="text-[10px] uppercase tracking-[0.5em] font-black text-stone-400 mb-4 block">Ebenzer Admin</span>
-                    <h1 className="text-3xl font-light text-white tracking-tighter">Acceso Restringido</h1>
+        <div className="min-h-screen bg-white flex flex-col md:flex-row font-sans">
+            {/* Left Side: Elegant visual block */}
+            <div className="hidden md:flex md:w-1/2 relative bg-stone-900 overflow-hidden select-none">
+                <img
+                    src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&q=80&w=1200"
+                    alt="Ebenzer Design"
+                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                />
+                
+                {/* Brand Overlay */}
+                <div className="absolute top-12 left-12 flex items-center gap-2 text-white">
+                    <ion-icon name="crop-outline" style={{ fontSize: '24px' }}></ion-icon>
+                    <span className="text-2xl font-bold tracking-tight">Ebenzer.</span>
                 </div>
 
-                <form onSubmit={handleLogin} className="flex flex-col gap-6">
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="Contraseña Maestra"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-stone-900/50 text-white px-6 py-4 rounded-full border border-stone-700 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400 transition-all text-sm tracking-widest placeholder:text-stone-600 text-center"
-                            autoFocus
-                        />
+                {/* Aesthetic Quote */}
+                <div className="absolute bottom-16 left-16 max-w-md text-white">
+                    <h2 className="text-4xl font-bold tracking-tight leading-tight mb-4">
+                        Define tu propio espacio.
+                    </h2>
+                    <p className="text-stone-300 text-sm leading-relaxed">
+                        Accede al panel de administración del CMS visual de Ebenzer para editar, reordenar y dar de alta proyectos a tu gusto.
+                    </p>
+                </div>
+            </div>
+
+            {/* Right Side: Elegant form */}
+            <div className="flex-1 flex items-center justify-center p-8 md:p-16 bg-white">
+                <div className="w-full max-w-[400px] flex flex-col">
+                    
+                    {/* Header */}
+                    <div className="mb-10">
+                        <h1 className="text-3xl font-bold tracking-tight text-stone-950 mb-2">
+                            Iniciar sesión
+                        </h1>
+                        <p className="text-stone-500 text-sm">
+                            Introduce tus credenciales para acceder al modo editor.
+                        </p>
                     </div>
 
-                    {error && (
-                        <p className="text-red-400 text-xs text-center font-medium tracking-widest uppercase">{error}</p>
-                    )}
+                    {/* Form */}
+                    <form onSubmit={handleLogin} className="flex flex-col gap-6">
+                        {/* Email Field */}
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] font-bold tracking-widest text-stone-400 uppercase">
+                                EMAIL
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-4 py-3 rounded-lg border border-stone-200 text-stone-900 focus:outline-none focus:border-stone-900 transition-colors text-sm"
+                                required
+                            />
+                        </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="bg-white text-stone-900 px-10 py-4 rounded-full font-black uppercase text-[10px] tracking-[0.2em] hover:bg-stone-200 transition-all shadow-2xl active:scale-95 text-center mt-2 disabled:opacity-50"
-                    >
-                        {loading ? "Verificando..." : "Entrar al Editor"}
-                    </button>
-                </form>
-            </motion.div>
+                        {/* Password Field */}
+                        <div className="flex flex-col gap-2">
+                            <div className="flex justify-between items-baseline">
+                                <label className="text-[10px] font-bold tracking-widest text-stone-400 uppercase">
+                                    CONTRASEÑA
+                                </label>
+                                <span className="text-[10px] font-semibold text-stone-400 hover:text-stone-900 cursor-pointer">
+                                    ¿Olvidaste tu contraseña?
+                                </span>
+                            </div>
+                            <input
+                                type="password"
+                                placeholder="Contraseña Maestra"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-4 py-3 rounded-lg border border-stone-200 text-stone-900 focus:outline-none focus:border-stone-900 transition-colors text-sm"
+                                autoFocus
+                                required
+                            />
+                        </div>
+
+                        {error && (
+                            <p className="text-red-500 text-xs font-semibold tracking-wide">{error}</p>
+                        )}
+
+                        {/* Submit button */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-stone-950 text-white py-3.5 rounded-full font-bold uppercase text-[11px] tracking-widest hover:bg-stone-850 active:scale-[0.99] transition-all text-center mt-2 disabled:opacity-50"
+                        >
+                            {loading ? "VERIFICANDO..." : "CONTINUAR"}
+                        </button>
+                    </form>
+
+                    {/* Footer */}
+                    <div className="mt-8 text-center text-xs text-stone-500">
+                        ¿Quieres volver al sitio?{" "}
+                        <Link href="/" className="font-semibold text-stone-900 hover:underline">
+                            Regresar al Inicio
+                        </Link>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

@@ -120,84 +120,82 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                 let blockContent = null;
                 switch (block.type || block.id) {
                     case "hero": blockContent = (
-            <section className="mx-auto max-w-7xl px-4 md:px-8 py-6 md:py-12 relative group">
-                <div className={`relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem] bg-stone-200 aspect-[5/6] md:aspect-[21/9] shadow-2xl ${isEditing ? 'ring-4 ring-indigo-500' : ''}`}>
-                    <Image
-                        src={localData.heroImage}
-                        className="object-cover w-full h-full"
-                        alt="Hero Principal"
-                        fill
-                        priority
-                    />
-                    {isEditing && (
-                        <div className="absolute top-4 left-4 z-50 bg-stone-900/80 p-3 rounded-2xl backdrop-blur-xl border border-white/10 shadow-2xl flex items-center gap-3">
-                            <label className="cursor-pointer bg-white text-stone-900 hover:bg-stone-200 transition-colors px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                                <ion-icon name="image-outline" style={{ fontSize: '16px', color: '#1c1917' }}></ion-icon>
-                                Cambiar Imagen
-                                <input 
-                                    type="file" 
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        if (e.target.files && e.target.files[0]) {
-                                            const file = e.target.files[0];
-                                            const objectUrl = URL.createObjectURL(file);
-                                            handleUpdate("heroImage", objectUrl);
-                                            // TODO: Conectar esto al endpoint POST /api/upload de Strapi
-                                        }
-                                    }}
-                                />
-                            </label>
-                        </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            <section className="relative w-full h-[85vh] group">
+                <Image
+                    src={localData.heroImage}
+                    className="object-cover w-full h-full"
+                    alt="Hero Principal"
+                    fill
+                    priority
+                />
+                <div className="absolute inset-0 bg-black/20"></div>
 
-                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-16">
-                        <div className="max-w-2xl">
-                            {isEditing ? (
-                                <textarea
-                                    value={localData.heroTitle}
-                                    onChange={(e) => handleUpdate("heroTitle", e.target.value)}
-                                    className="w-full bg-black/30 border border-indigo-500 text-4xl md:text-7xl text-white font-light leading-[0.9] mb-6 tracking-tighter rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                                    rows={3}
-                                />
-                            ) : (
-                                <motion.h2
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-4xl md:text-7xl text-white font-light leading-[0.9] mb-6 tracking-tighter whitespace-pre-line"
-                                    dangerouslySetInnerHTML={{ __html: localData.heroTitle.replace("historia.", '<span class="font-black italic">historia.</span>') }}
-                                />
-                            )}
+                {isEditing && (
+                    <div className="absolute top-4 right-4 z-50 bg-white p-2 rounded shadow-xl">
+                        <label className="cursor-pointer text-xs font-bold px-4 py-2 hover:bg-stone-100 flex items-center gap-2">
+                            Cambiar Imagen
+                            <input 
+                                type="file" 
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                        const file = e.target.files[0];
+                                        const objectUrl = URL.createObjectURL(file);
+                                        handleUpdate("heroImage", objectUrl);
+                                    }
+                                }}
+                            />
+                        </label>
+                    </div>
+                )}
 
+                <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 max-w-[1400px] mx-auto">
+                    <div className="max-w-xl">
+                        {isEditing ? (
+                            <textarea
+                                value={localData.heroTitle}
+                                onChange={(e) => handleUpdate("heroTitle", e.target.value)}
+                                className="w-full bg-transparent text-5xl md:text-7xl text-white font-medium leading-[1.1] tracking-tight mb-6 focus:outline-none focus:ring-1 focus:ring-white/50"
+                                rows={3}
+                            />
+                        ) : (
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-5xl md:text-7xl text-white font-medium leading-[1.1] tracking-tight mb-6 whitespace-pre-line"
+                                dangerouslySetInnerHTML={{ __html: localData.heroTitle }}
+                            />
+                        )}
+
+                        {isEditing ? (
+                            <textarea
+                                value={localData.heroSubtitle}
+                                onChange={(e) => handleUpdate("heroSubtitle", e.target.value)}
+                                className="w-full bg-transparent text-sm md:text-base text-white/90 leading-relaxed mb-10 focus:outline-none"
+                                rows={3}
+                            />
+                        ) : (
+                            <p className="text-sm md:text-base text-white/90 leading-relaxed mb-10 max-w-lg">
+                                {localData.heroSubtitle}
+                            </p>
+                        )}
+
+                        <div className="flex">
                             {isEditing ? (
                                 <input
-                                    value={localData.heroSubtitle}
-                                    onChange={(e) => handleUpdate("heroSubtitle", e.target.value)}
-                                    className="w-full bg-black/30 border border-indigo-500 text-[10px] md:text-xs uppercase tracking-[0.4em] text-white font-bold mb-8 md:mb-12 rounded-lg p-2 focus:outline-none"
+                                    value={localData.ctaText}
+                                    onChange={(e) => handleUpdate("ctaText", e.target.value)}
+                                    className="bg-transparent text-white font-bold uppercase text-[11px] tracking-[0.15em] border-b-2 border-white pb-2 focus:outline-none"
                                 />
                             ) : (
-                                <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-white/70 font-bold mb-8 md:mb-12">
-                                    {localData.heroSubtitle}
-                                </p>
+                                <Link
+                                    href={localData.ctaLink || "/proyectos"}
+                                    className="text-white font-bold uppercase text-[11px] tracking-[0.15em] border-b-2 border-white pb-2 hover:text-stone-200 hover:border-stone-200 transition-colors"
+                                >
+                                    {localData.ctaText}
+                                </Link>
                             )}
-
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                {isEditing ? (
-                                    <input
-                                        value={localData.ctaText}
-                                        onChange={(e) => handleUpdate("ctaText", e.target.value)}
-                                        className="bg-white text-stone-900 px-10 py-5 rounded-full font-black uppercase text-[10px] tracking-[0.2em] border-2 border-indigo-500 focus:outline-none text-center"
-                                    />
-                                ) : (
-                                    <Link
-                                        href={localData.ctaLink || "/contact"}
-                                        className="bg-white text-stone-900 px-10 py-5 rounded-full font-black uppercase text-[10px] tracking-[0.2em] hover:bg-stone-900 hover:text-white transition-all shadow-2xl active:scale-95 text-center"
-                                    >
-                                        {localData.ctaText}
-                                    </Link>
-                                )}
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import { AdminProvider } from "@/context/AdminContext";
@@ -9,9 +9,9 @@ import Script from "next/script";
 import fs from 'fs/promises';
 import path from 'path';
 
-const plusJakarta = Plus_Jakarta_Sans({
+const geist = Inter({
     subsets: ["latin"],
-    variable: "--font-plus-jakarta-sans",
+    variable: "--font-geist",
 });
 
 export const metadata: Metadata = {
@@ -48,7 +48,7 @@ export default async function RootLayout({
                 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" async={false}></script>
                 <script noModule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" async={false}></script>
             </head>
-            <body className={`${plusJakarta.variable} font-sans antialiased text-stone-900 bg-stone-50`}>
+            <body className={`${geist.variable} font-sans antialiased text-stone-900 bg-stone-50`}>
             <AdminProvider isAdmin={isAdmin}>
                 <div className="bg-stone-900 text-stone-100 py-4 px-6 text-center text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-medium leading-relaxed">
                     {globalData.navbar?.topBanner || "Presupuestos sin compromiso | Calidad garantizada en toda España"}
