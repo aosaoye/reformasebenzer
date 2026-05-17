@@ -86,9 +86,10 @@ export default function ProjectsClient({
                             rows={1}
                         />
                     ) : (
-                        <h2 className="text-4xl font-bold tracking-tight text-stone-900">
-                            {localData.title}
-                        </h2>
+                        <h2 
+                            className="text-4xl font-bold tracking-tight text-stone-900"
+                            dangerouslySetInnerHTML={{ __html: localData.title }}
+                        />
                     )}
                 </div>
                 <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-stone-400">

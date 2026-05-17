@@ -27,16 +27,16 @@ export default function CategoryFilter() {
     };
 
     return (
-        <div className="w-full mb-12">
-            <div className="flex flex-wrap gap-3">
+        <div className="w-full mb-12 border-b border-stone-100 pb-6">
+            <div className="flex flex-wrap gap-x-8 gap-y-4">
                 {categories.map((cat) => (
                     <button
                         key={cat.value}
                         onClick={() => handleCategoryClick(cat.value)}
-                        className={`text-[10px] tracking-[0.15em] font-bold px-5 py-2.5 rounded-full transition-all duration-300 ${
+                        className={`text-[11px] tracking-[0.2em] font-bold uppercase transition-all duration-300 relative py-1 ${
                             activeCategory === cat.value
-                                ? "bg-stone-900 text-white border border-stone-900"
-                                : "bg-transparent border border-stone-200 text-stone-500 hover:text-stone-900 hover:border-stone-900"
+                                ? "text-stone-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-stone-900"
+                                : "text-stone-400 hover:text-stone-900"
                         }`}
                     >
                         {cat.label}
