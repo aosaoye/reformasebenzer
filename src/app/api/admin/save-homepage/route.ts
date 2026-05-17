@@ -23,6 +23,7 @@ export async function PUT(request: Request) {
             aboutTitle: data.aboutTitle,
             aboutContent: data.aboutContent,
             publishedAt: new Date().toISOString(),
+            status: "published",
         };
 
         // Guardamos los campos extra que no existen en el esquema nativo de Strapi
