@@ -20,7 +20,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         let mediaData: any = {};
         try { mediaData = JSON.parse(await fs.readFile(mediaPath, 'utf8')); } catch (e) {}
         mediaData[id] = { mainImage, galleryUrls, videoUrls };
-        await fs.writeFile(mediaPath, JSON.stringify(mediaData, null, 2));
+        try {
+            await fs.writeFile(mediaPath, JSON.stringify(mediaData, null, 2));
+        } catch (fsError: any) {
+            console.warn("Fallo al guardar archivo local de projects-media (Vercel):", fsError.message);
+        }
 
         // Update in Strapi 5
         const response = await fetchStrapi(`projects/${id}`, undefined, {

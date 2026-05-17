@@ -30,7 +30,11 @@ export async function PUT(request: Request) {
         if (payload.footer) newData.footer = { ...currentData.footer, ...payload.footer };
         if (payload.theme) newData.theme = { ...currentData.theme, ...payload.theme };
 
-        await fs.writeFile(dataPath, JSON.stringify(newData, null, 4), 'utf-8');
+        try {
+            await fs.writeFile(dataPath, JSON.stringify(newData, null, 4), 'utf-8');
+        } catch (fsError: any) {
+            console.warn("Fallo al guardar archivo local de global (Vercel):", fsError.message);
+        }
 
         revalidatePath("/", "layout");
 

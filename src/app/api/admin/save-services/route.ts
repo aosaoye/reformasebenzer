@@ -14,7 +14,11 @@ export async function PUT(request: Request) {
         const data = await request.json();
 
         const dataPath = path.join(process.cwd(), 'src', 'data', 'services.json');
-        await fs.writeFile(dataPath, JSON.stringify(data, null, 4), 'utf-8');
+        try {
+            await fs.writeFile(dataPath, JSON.stringify(data, null, 4), 'utf-8');
+        } catch (fsError: any) {
+            console.warn("Fallo al guardar archivo local de services (Vercel):", fsError.message);
+        }
 
         revalidatePath("/servicios");
 

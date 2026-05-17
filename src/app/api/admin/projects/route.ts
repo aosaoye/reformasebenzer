@@ -32,7 +32,11 @@ export async function POST(request: Request) {
             let mediaData: any = {};
             try { mediaData = JSON.parse(await fs.readFile(mediaPath, 'utf8')); } catch (e) {}
             mediaData[newId] = { mainImage, galleryUrls, videoUrls };
-            await fs.writeFile(mediaPath, JSON.stringify(mediaData, null, 2));
+            try {
+                await fs.writeFile(mediaPath, JSON.stringify(mediaData, null, 2));
+            } catch (fsError: any) {
+                console.warn("Fallo al guardar archivo local de projects-media (Vercel):", fsError.message);
+            }
         }
 
         return NextResponse.json({ success: true, data: response.data });

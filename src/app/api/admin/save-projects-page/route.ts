@@ -12,7 +12,11 @@ export async function PUT(request: Request) {
 
         const data = await request.json();
         const dataPath = path.join(process.cwd(), 'src', 'data', 'projects-page.json');
-        await fs.writeFile(dataPath, JSON.stringify(data, null, 2), 'utf-8');
+        try {
+            await fs.writeFile(dataPath, JSON.stringify(data, null, 2), 'utf-8');
+        } catch (fsError: any) {
+            console.warn("Fallo al guardar archivo local de projects-page (Vercel):", fsError.message);
+        }
 
         return NextResponse.json({ success: true });
     } catch (error: any) {

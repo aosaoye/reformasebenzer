@@ -10,7 +10,29 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
     const { isEditing, setIsEditing } = useAdmin();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [localSettings, setLocalSettings] = useState(settings || { siteName: "Ebenzer", layout: "default" });
+    const [isSaving, setIsSaving] = useState(false);
     const pathname = usePathname();
+
+    const handleSaveNavbar = async () => {
+        setIsSaving(true);
+        try {
+            const res = await fetch("/api/admin/save-global", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ navbar: localSettings })
+            });
+            if (res.ok) {
+                alert("Navegación guardada con éxito.");
+                window.location.reload();
+            } else {
+                alert("Error al guardar la navegación.");
+            }
+        } catch(e) {
+            alert("Error de conexión");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const navLinks = [
         { name: "INICIO", href: "/" },
@@ -71,35 +93,66 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
                     {/* Logo */}
                     <div className="flex items-center gap-2">
                         <ion-icon name="crop-outline" style={{ fontSize: '24px', color: logoColor }}></ion-icon>
-                        <Link href="/" className={`text-2xl font-bold tracking-tight transition-colors duration-300 ${textClass}`}>
-                            {localSettings.siteName}.
-                        </Link>
+                        {isEditing ? (
+                            <input 
+                                value={localSettings.siteName}
+                                onChange={(e) => setLocalSettings({...localSettings, siteName: e.target.value})}
+                                className="text-xl md:text-2xl font-bold tracking-tight bg-stone-100 text-stone-900 border border-stone-200 focus:border-indigo-500 focus:outline-none px-3 py-1 rounded-xl w-32 md:w-44 transition-all"
+                                placeholder="Nombre sitio"
+                            />
+                        ) : (
+                            <Link href="/" className={`text-2xl font-bold tracking-tight transition-colors duration-300 ${textClass}`}>
+                                {localSettings.siteName}.
+                            </Link>
+                        )}
                     </div>
 
                     {/* Desktop Center Navigation */}
-                    <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2">
-                        <ul className="flex items-center gap-12 text-[11px] font-bold tracking-[0.15em]">
-                            {navLinks.map((link) => (
-                                <li key={link.href} className="relative flex flex-col items-center">
-                                    <Link
-                                        href={link.href}
-                                        className={`transition-colors duration-300 ${navLinkClass(link.href)}`}
-                                    >
-                                        {link.name}
-                                    </Link>
-                                    {pathname === link.href && (
-                                        <motion.div
-                                            layoutId="navDot"
-                                            className={`absolute -bottom-3 w-1 h-1 rounded-full ${dotClass}`}
-                                        />
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
+                    {localSettings.layout !== 'minimal' && (
+                        <nav className={`hidden md:flex ${localSettings.layout === 'center' || !localSettings.layout ? 'absolute left-1/2 -translate-x-1/2' : 'ml-12'}`}>
+                            <ul className="flex items-center gap-12 text-[11px] font-bold tracking-[0.15em]">
+                                {navLinks.map((link) => (
+                                    <li key={link.href} className="relative flex flex-col items-center">
+                                        <Link
+                                            href={link.href}
+                                            className={`transition-colors duration-300 ${navLinkClass(link.href)}`}
+                                        >
+                                            {link.name}
+                                        </Link>
+                                        {pathname === link.href && (
+                                            <motion.div
+                                                layoutId="navDot"
+                                                className={`absolute -bottom-3 w-1 h-1 rounded-full ${dotClass}`}
+                                            />
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    )}
 
                     {/* Right Navigation - Clean CTA Button */}
                     <div className="hidden md:flex items-center gap-4">
+                        {isEditing && (
+                            <div className="flex items-center gap-2 mr-2">
+                                <select 
+                                    value={localSettings.layout || "default"} 
+                                    onChange={(e) => setLocalSettings({...localSettings, layout: e.target.value})}
+                                    className="text-[9px] uppercase font-black tracking-widest p-2 bg-stone-100 hover:bg-stone-200 border border-stone-200 rounded-full focus:outline-none transition cursor-pointer text-stone-900"
+                                >
+                                    <option value="default">Izquierda</option>
+                                    <option value="center">Centro</option>
+                                    <option value="minimal">Minimal</option>
+                                </select>
+                                <button 
+                                    onClick={handleSaveNavbar}
+                                    disabled={isSaving}
+                                    className="text-[9px] uppercase font-black tracking-widest px-4 py-2.5 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white shadow-md transition-all flex items-center gap-2"
+                                >
+                                    {isSaving ? "..." : "Guardar Navbar"}
+                                </button>
+                            </div>
+                        )}
                         {isAdmin && (
                             <Link href="/admin" className={`text-[10px] font-bold tracking-[0.15em] transition mr-2 ${isDarkTheme ? "text-white/60 hover:text-white" : "text-stone-400 hover:text-stone-900"}`}>
                                 ADMIN

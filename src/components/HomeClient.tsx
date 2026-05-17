@@ -131,8 +131,9 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                 <div className="absolute inset-0 bg-black/20"></div>
 
                 {isEditing && (
-                    <div className="absolute top-4 right-4 z-50 bg-white p-2 rounded shadow-xl">
-                        <label className="cursor-pointer text-xs font-bold px-4 py-2 hover:bg-stone-100 flex items-center gap-2">
+                    <div className="absolute top-28 right-6 z-[90] bg-white/95 hover:bg-white border border-stone-200/80 p-1 rounded-full shadow-2xl transition-all duration-300 hover:scale-105">
+                        <label className="cursor-pointer text-[10px] uppercase tracking-[0.15em] font-extrabold px-5 py-2.5 hover:bg-stone-50 rounded-full flex items-center gap-2 text-stone-900">
+                            <ion-icon name="image-outline" style={{ fontSize: '13px' }}></ion-icon>
                             Cambiar Imagen
                             <input 
                                 type="file" 

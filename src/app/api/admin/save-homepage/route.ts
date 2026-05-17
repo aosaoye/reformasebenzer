@@ -34,6 +34,8 @@ export async function PUT(request: Request) {
             heroCtaLink: data.ctaLink,
             statsYears: Number(data.statsYears),
             statsProjects: Number(data.statsProjects),
+            aboutTitle: data.aboutTitle,
+            aboutContent: data.aboutContent,
         };
 
         // Guardamos los campos extra que no existen en el esquema nativo de Strapi
@@ -44,10 +46,14 @@ export async function PUT(request: Request) {
             aboutSubtitle: data.aboutSubtitle,
             aboutEst: data.aboutEst
         };
-        const fs = require('fs/promises');
-        const path = require('path');
-        const dataPath = path.join(process.cwd(), 'src', 'data', 'homepage-extra.json');
-        await fs.writeFile(dataPath, JSON.stringify(extraData, null, 2), 'utf-8');
+        try {
+            const fs = require('fs/promises');
+            const path = require('path');
+            const dataPath = path.join(process.cwd(), 'src', 'data', 'homepage-extra.json');
+            await fs.writeFile(dataPath, JSON.stringify(extraData, null, 2), 'utf-8');
+        } catch (fsError: any) {
+            console.warn("Fallo al guardar archivo local (probablemente en producción/Vercel):", fsError.message);
+        }
 
         const method = documentExists ? "PUT" : "POST";
         const endpoint = "homepage";

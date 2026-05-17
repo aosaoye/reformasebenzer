@@ -15,8 +15,12 @@ export async function PUT(request: Request) {
 
         // Guardamos en un archivo local.
         // NOTA: En producción (Vercel) esto requeriría una base de datos o un campo JSON en Strapi.
-        const layoutPath = path.join(process.cwd(), 'src', 'data', 'layout.json');
-        await fs.writeFile(layoutPath, JSON.stringify(data.layout, null, 4), 'utf-8');
+        try {
+            const layoutPath = path.join(process.cwd(), 'src', 'data', 'layout.json');
+            await fs.writeFile(layoutPath, JSON.stringify(data.layout, null, 4), 'utf-8');
+        } catch (fsError: any) {
+            console.warn("Fallo al guardar archivo local de layout (Vercel):", fsError.message);
+        }
 
         revalidatePath("/");
 
