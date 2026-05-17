@@ -1,6 +1,28 @@
 import { fetchStrapi, getStrapiMedia } from "@/lib/strapi";
 import { projects as mockProjects, Project as MockProject } from "@/lib/data";
 
+const fallbacks = [
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop", // Luxury Kitchen
+    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1000&auto=format&fit=crop", // Modern Interior
+    "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1000&auto=format&fit=crop", // Minimalist Bedroom
+    "https://images.unsplash.com/photo-1556911223-e4520288df81?q=80&w=1000&auto=format&fit=crop", // Premium Kitchen
+    "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop", // Luxury Bath
+    "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop"  // Elegant Lounge
+];
+
+function getFallbackImage(projId: string | number, index?: number) {
+    if (typeof index === 'number') {
+        return fallbacks[index % fallbacks.length];
+    }
+    const strId = String(projId);
+    let hash = 0;
+    for (let j = 0; j < strId.length; j++) {
+        hash = strId.charCodeAt(j) + ((hash << 5) - hash);
+    }
+    const idx = Math.abs(hash) % fallbacks.length;
+    return fallbacks[idx];
+}
+
 export async function getAllProjects(categorySlug?: string) {
     try {
         const query: any = {
@@ -35,17 +57,18 @@ export async function getAllProjects(categorySlug?: string) {
         } catch (e) {}
 
         // Map Strapi response to app project shape
-        return response.data.map((item: any) => {
+        return response.data.map((item: any, i: number) => {
             const attributes = item.attributes || item; // Handle Strapi 5 different format variations
             const id = item.documentId || item.id;
             const customMedia = mediaData[id] || {};
+            const fallback = getFallbackImage(id, i);
             
             return {
                 id,
                 name: attributes.title || attributes.name,
                 price: attributes.budget || 0,
                 category: attributes.category?.name || "Sin categoría",
-                image: customMedia.mainImage || getStrapiMedia(attributes.mainImage?.url) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop",
+                image: customMedia.mainImage || getStrapiMedia(attributes.mainImage?.url) || fallback,
                 images: customMedia.galleryUrls && customMedia.galleryUrls.length > 0 ? [customMedia.mainImage, ...customMedia.galleryUrls].filter(Boolean) : undefined,
                 videos: customMedia.videoUrls || undefined,
                 description: attributes.description || "",
@@ -101,13 +124,14 @@ export async function getProjectById(id: string) {
             ? videosRaw.map((vid: any) => getStrapiMedia(vid.url)).filter(Boolean).slice(0, 2)
             : [];
 
+        const fallback = getFallbackImage(id);
         return {
             id,
             name: attributes.title || attributes.name,
             price: attributes.budget || 0,
             category: attributes.category?.name || "Sin categoría",
-            image: mainImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop",
-            images: allImages.length > 0 ? allImages : [mainImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop"],
+            image: mainImage || fallback,
+            images: allImages.length > 0 ? allImages : [mainImage || fallback],
             videos: videoUrls,
             description: attributes.description || "",
             details: [
