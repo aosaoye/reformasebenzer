@@ -39,7 +39,7 @@ export default function ProjectCarousel({ projects, isAdmin, isEditing }: { proj
     };
 
     return (
-        <section ref={containerRef} className={`py-32 overflow-hidden relative ${isEditing ? 'bg-stone-50 ring-4 ring-indigo-500 rounded-3xl my-4' : 'bg-white'}`}>
+        <section ref={containerRef} className={`py-12 overflow-hidden relative ${isEditing ? 'bg-stone-50 ring-4 ring-indigo-500 rounded-3xl my-4' : 'bg-white'}`}>
             {/* Cinematic Background Title */}
             <div className="absolute top-0 left-0 w-full overflow-hidden pointer-events-none select-none -translate-y-1/2 md:-translate-y-1/3">
                 <motion.span
@@ -50,8 +50,8 @@ export default function ProjectCarousel({ projects, isAdmin, isEditing }: { proj
                 </motion.span>
             </div>
 
-            <div className="relative z-10 mx-auto max-w-7xl px-6">
-                <header className="flex flex-col md:flex-row justify-between items-end mb-20 gap-12">
+            <div className="relative z-10 mx-auto max-w-[1400px] px-8">
+                <header className="flex flex-col md:flex-row justify-between items-end mb-12 gap-12">
                     <div className="max-w-2xl w-full">
                         {isEditing ? (
                             <>
@@ -136,34 +136,35 @@ export default function ProjectCarousel({ projects, isAdmin, isEditing }: { proj
                     onClose={() => setIsManagerOpen(false)} 
                     projects={projects} 
                 />
+            </div>
 
-                <div
-                    ref={scrollRef}
-                    className="flex pb-16 overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth"
-                >
-                    {projects.map((project, i) => (
-                        <motion.div
-                            key={project.id}
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            transition={{ duration: 0.5 }}
-                            viewport={{ once: true }}
-                            className="min-w-full sm:min-w-[50%] lg:min-w-[33.333333%] snap-start"
-                        >
-                            <Link href={`/proyectos/${project.id}`} className="block px-3">
-                                <div className="relative aspect-[4/3] rounded-3xl overflow-hidden mb-6 bg-stone-100 group shadow-sm">
-                                    <Image
-                                        src={project.image}
-                                        className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-102"
-                                        alt=""
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    />
-                                </div>
-                            </Link>
-                        </motion.div>
-                    ))}
-                </div>
+            {/* Full-bleed scrollable slider container */}
+            <div
+                ref={scrollRef}
+                className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth w-full px-8 gap-6 pb-4"
+            >
+                {projects.map((project, i) => (
+                    <motion.div
+                        key={project.id}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        viewport={{ once: true }}
+                        className="min-w-[85vw] sm:min-w-[45vw] lg:min-w-[30vw] snap-start"
+                    >
+                        <Link href={`/proyectos/${project.id}`} className="block">
+                            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-stone-100 group shadow-sm">
+                                <Image
+                                    src={project.image}
+                                    className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-102"
+                                    alt=""
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
+                            </div>
+                        </Link>
+                    </motion.div>
+                ))}
             </div>
         </section>
     );

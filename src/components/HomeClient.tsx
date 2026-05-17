@@ -227,9 +227,9 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                         </div>
                     ); break;
                     case "projects": blockContent = (
-                        <section className="px-4 md:px-8">
+                        <div className="w-full">
                 {projects.length > 0 && <ProjectCarousel projects={projects} isAdmin={isAdmin} isEditing={isEditing} />}
-            </section>
+            </div>
                     ); break;
 
                     case "testimonials": blockContent = <TestimonialsGrid initialTestimonials={testimonials} />; break;
