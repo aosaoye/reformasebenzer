@@ -70,7 +70,7 @@ export default function ServicesClient({ initialData, isAdmin = false }: { initi
     };
 
     return (
-        <main className="px-6 py-24 mx-auto max-w-7xl overflow-hidden relative">
+        <main className="px-6 pt-32 pb-16 mx-auto max-w-7xl overflow-hidden relative">
             
 
             
@@ -95,9 +95,9 @@ export default function ServicesClient({ initialData, isAdmin = false }: { initi
 
                 {isEditing ? (
                     <div className="flex flex-col gap-2 mb-10">
-                        <input value={localData.header.title1} onChange={(e) => handleUpdateHeader("title1", e.target.value)} className="text-5xl md:text-8xl font-black tracking-tighter leading-none text-stone-900 bg-stone-100 w-full text-center p-2 rounded-lg" />
-                        <input value={localData.header.titleHighlight} onChange={(e) => handleUpdateHeader("titleHighlight", e.target.value)} className="text-5xl md:text-8xl font-light italic tracking-tighter leading-none text-stone-300 bg-stone-100 w-full text-center p-2 rounded-lg" />
-                        <input value={localData.header.title2} onChange={(e) => handleUpdateHeader("title2", e.target.value)} className="text-5xl md:text-8xl font-black tracking-tighter leading-none text-stone-900 bg-stone-100 w-full text-center p-2 rounded-lg" />
+                        <input value={localData.header.title1} onChange={(e) => handleUpdateHeader("title1", e.target.value)} className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900 bg-stone-100 w-full text-center p-2 rounded-lg" />
+                        <input value={localData.header.titleHighlight} onChange={(e) => handleUpdateHeader("titleHighlight", e.target.value)} className="text-5xl md:text-8xl font-light italic tracking-tighter leading-[0.9] text-stone-300 bg-stone-100 w-full text-center p-2 rounded-lg" />
+                        <input value={localData.header.title2} onChange={(e) => handleUpdateHeader("title2", e.target.value)} className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900 bg-stone-100 w-full text-center p-2 rounded-lg" />
                         
                         <div className="mt-8 bg-stone-100 p-4 rounded-xl">
                             <label className="text-xs uppercase font-bold tracking-widest text-stone-500 mb-2 block">Redondeo de Imágenes (px)</label>
@@ -115,7 +115,7 @@ export default function ServicesClient({ initialData, isAdmin = false }: { initi
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-10 text-stone-900"
+                        className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-10 text-stone-900"
                     >
                         {localData.header.title1} <span className="text-stone-300 italic font-light">{localData.header.titleHighlight}</span>{localData.header.title2}
                     </motion.h2>

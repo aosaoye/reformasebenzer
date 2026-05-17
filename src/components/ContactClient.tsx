@@ -143,7 +143,7 @@ export default function ContactClient({ initialData }: { initialData: any }) {
     };
 
     return (
-        <main className={`px-6 py-12 mx-auto max-w-7xl animate-in fade-in duration-500 ${isEditing ? 'ring-4 ring-indigo-500/50 rounded-3xl p-8 my-8 relative' : ''}`}>
+        <main className={`px-6 pt-32 pb-16 mx-auto max-w-7xl animate-in fade-in duration-500 ${isEditing ? 'ring-4 ring-indigo-500/50 rounded-3xl p-8 my-8 relative' : ''}`}>
             {isEditing && (
                 <button 
                     onClick={handleSave}
@@ -157,13 +157,17 @@ export default function ContactClient({ initialData }: { initialData: any }) {
             <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
                 <div>
                     {isEditing ? (
-                        <input
+                        <textarea
                             value={localData.header.title}
                             onChange={(e) => updateHeader('title', e.target.value)}
-                            className="mb-6 text-5xl md:text-7xl font-bold tracking-tighter w-full bg-stone-100 p-2 rounded-lg"
+                            className="mb-6 text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] w-full bg-stone-100 p-2 rounded-lg"
+                            rows={2}
                         />
                     ) : (
-                        <h2 className="mb-6 text-5xl md:text-7xl font-bold tracking-tighter">{localData.header.title}</h2>
+                        <h2 
+                            className="mb-6 text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-stone-900"
+                            dangerouslySetInnerHTML={{ __html: localData.header.title }}
+                        />
                     )}
                     
                     {isEditing ? (
