@@ -120,7 +120,7 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                 let blockContent = null;
                 switch (block.type || block.id) {
                     case "hero": blockContent = (
-            <section className="relative w-full h-[85vh] group">
+            <section className="relative w-full h-screen group">
                 <Image
                     src={localData.heroImage}
                     className="object-cover w-full h-full"
