@@ -23,7 +23,6 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
             });
             if (res.ok) {
                 alert("Navegación guardada con éxito.");
-                window.location.reload();
             } else {
                 alert("Error al guardar la navegación.");
             }
