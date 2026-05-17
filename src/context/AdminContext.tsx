@@ -43,10 +43,12 @@ export function AdminProvider({ children, isAdmin }: { children: React.ReactNode
 
     return (
         <AdminContext.Provider value={{ isEditing: isAdmin && isEditing, setIsEditing: handleSetIsEditing }}>
+            {isAdmin && <div className="h-14"></div>}
+            {children}
             {isAdmin && (
                 <div 
                     className="fixed top-0 left-0 right-0 p-3 flex items-center justify-between text-xs font-bold uppercase tracking-widest shadow-2xl border-b border-stone-850"
-                    style={{ backgroundColor: '#1c1917', color: '#ffffff', zIndex: 99999 }}
+                    style={{ backgroundColor: '#1c1917', color: '#ffffff', zIndex: 99999, transform: 'translate3d(0,0,0)' }}
                 >
                     <div className="flex items-center gap-4">
                         <span className="w-8 h-8 rounded-full flex items-center justify-center font-black" style={{ backgroundColor: '#ffffff', color: '#1c1917' }}>E</span>
@@ -78,8 +80,6 @@ export function AdminProvider({ children, isAdmin }: { children: React.ReactNode
                     </div>
                 </div>
             )}
-            {isAdmin && <div className="h-14"></div>}
-            {children}
         </AdminContext.Provider>
     );
 }
