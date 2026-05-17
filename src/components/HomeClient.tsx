@@ -251,10 +251,10 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                         <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-stone-400 mb-4 block">
                             Pasión por lo excepcional
                         </span>
-                        <h2 className="mb-6 text-5xl md:text-8xl font-black leading-[0.9] text-stone-900 tracking-tighter uppercase">
+                        <h2 className="mb-6 text-3xl md:text-5xl font-bold leading-tight text-stone-900 tracking-tight">
                             Excelencia en <br />
                             cada acabado, <br />
-                            <span className="text-stone-300 italic font-light">pasión en cada detalle.</span>
+                            <span className="text-stone-400 italic font-medium">pasión en cada detalle.</span>
                         </h2>
                         <p className="mb-8 text-sm md:text-base leading-relaxed text-stone-500 max-w-lg">
                             En Reformas Ebenzer no seguimos tendencias, las creamos. Entendemos que tu hogar es la extensión de tu alma.

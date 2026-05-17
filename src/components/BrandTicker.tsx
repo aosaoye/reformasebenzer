@@ -73,12 +73,12 @@ export default function BrandTicker({
                             <textarea 
                                 value={aboutTitle.replace(/<br \/>/g, '\n').replace(/<span.*?>/g, '').replace(/<\/span>/g, '')} 
                                 onChange={(e) => onUpdate("aboutTitle", e.target.value.replace(/\n/g, '<br />'))}
-                                className="text-3xl md:text-7xl font-black tracking-tighter leading-[0.85] text-stone-900 uppercase w-full bg-stone-100 p-4 border border-indigo-500 rounded"
+                                className="text-3xl md:text-7xl font-black tracking-tighter leading-[0.85] text-stone-900 w-full bg-stone-100 p-4 border border-indigo-500 rounded"
                                 rows={3}
                             />
                         ) : (
                             <h2 
-                                className="text-5xl md:text-9xl font-black tracking-tighter leading-[0.85] text-stone-900 uppercase"
+                                className="text-5xl md:text-9xl font-black tracking-tighter leading-[0.85] text-stone-900"
                                 dangerouslySetInnerHTML={{ __html: aboutTitle }}
                             />
                         )}
