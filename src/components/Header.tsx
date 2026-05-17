@@ -13,9 +13,9 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
     const pathname = usePathname();
 
     const navLinks = [
-        { name: "HOME", href: "/" },
-        { name: "PROJECTS", href: "/proyectos" },
-        { name: "CONTACT", href: "/contact" },
+        { name: "INICIO", href: "/" },
+        { name: "PROYECTOS", href: "/proyectos" },
+        { name: "CONTACTO", href: "/contact" },
     ];
 
     const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
@@ -136,8 +136,8 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
                                 </li>
                             ))}
                             <li className="mt-8 flex gap-6 justify-center">
-                                <Link href="/admin" onClick={toggleDrawer} className="text-sm">LOGIN</Link>
-                                <Link href="/contact" onClick={toggleDrawer} className="text-sm">REGISTER</Link>
+                                <Link href="/admin" onClick={toggleDrawer} className="text-sm">ACCESO</Link>
+                                <Link href="/contact" onClick={toggleDrawer} className="text-sm">PRESUPUESTO</Link>
                             </li>
                         </ul>
                     </motion.div>
