@@ -57,7 +57,7 @@ export async function PUT(request: Request) {
         }
 
         const method = documentExists ? "PUT" : "POST";
-        const endpoint = documentExists && documentId ? `homepage/${documentId}` : "homepage";
+        const endpoint = "homepage";
 
         try {
             const response = await fetchStrapi(endpoint, undefined, {
