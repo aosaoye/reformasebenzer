@@ -150,7 +150,7 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
                     </div>
                 )}
 
-                <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 max-w-[1400px] mx-auto">
+                <div className="absolute inset-0 flex flex-col justify-center px-8 w-full max-w-[1400px] mx-auto">
                     <div className="max-w-xl">
                         {isEditing ? (
                             <textarea
@@ -234,67 +234,64 @@ export default function HomeClient({ projects, homepage, testimonials = [], isAd
 
                     case "testimonials": blockContent = <TestimonialsGrid initialTestimonials={testimonials} />; break;
                     case "commitment": blockContent = (
-            <section className="mx-auto max-w-7xl px-4 md:px-8 mb-48 relative group">
-                <div className={`relative py-32 bg-stone-900 text-stone-100 rounded-[3rem] md:rounded-[4rem] px-8 md:px-20 overflow-hidden shadow-2xl group ${isEditing ? 'ring-4 ring-indigo-500' : ''}`}>
-                    <div className="absolute inset-0 z-0">
+            <section className="mx-auto max-w-[1400px] px-8 mb-40 relative group">
+                <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center ${isEditing ? 'ring-4 ring-indigo-500 p-6 rounded-3xl bg-indigo-50/10' : ''}`}>
+                    {/* Left Column: Clean Image */}
+                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-stone-100 shadow-md group">
                         <Image
                             src="https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&q=80&w=2000"
-                            className="object-cover w-full h-full opacity-40 transition-transform duration-[10s] group-hover:scale-110"
+                            className="object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-102"
                             alt="Interiorismo de Lujo"
                             fill
                         />
-                        <div className="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-900/80 to-transparent"></div>
                     </div>
 
-                    <div className="relative z-10 max-w-3xl">
-                        <motion.span
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            className="text-[10px] uppercase tracking-[0.6em] font-black text-stone-500 mb-8 block"
-                        >
+                    {/* Right Column: Uniform Text Content & Stats */}
+                    <div className="flex flex-col justify-center">
+                        <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-stone-400 mb-4 block">
                             Pasión por lo excepcional
-                        </motion.span>
-                        <h2 className="mb-12 text-4xl md:text-7xl font-light leading-[0.9] tracking-tighter uppercase">
+                        </span>
+                        <h2 className="mb-6 text-3xl md:text-5xl font-bold leading-tight text-stone-900 tracking-tight">
                             Excelencia en <br />
                             cada acabado, <br />
-                            <span className="text-stone-300 italic font-black">pasión en cada detalle.</span>
+                            <span className="text-stone-400 italic font-medium">pasión en cada detalle.</span>
                         </h2>
-                        <p className="mb-16 text-lg md:text-xl leading-relaxed text-stone-400 font-light max-w-xl">
+                        <p className="mb-8 text-sm md:text-base leading-relaxed text-stone-500 max-w-lg">
                             En Reformas Ebenzer no seguimos tendencias, las creamos. Entendemos que tu hogar es la extensión de tu alma.
                         </p>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-20">
-                            <div className="flex flex-col gap-2">
+                        
+                        <div className="grid grid-cols-3 gap-6 pt-8 border-t border-stone-200">
+                            <div className="flex flex-col gap-1">
                                 {isEditing ? (
                                     <input 
                                         type="number" 
                                         value={localData.statsYears} 
                                         onChange={(e) => handleUpdate("statsYears", parseInt(e.target.value))}
-                                        className="w-24 bg-white/20 text-4xl md:text-5xl font-black text-white italic tracking-tighter border-b-2 border-indigo-500 focus:outline-none"
+                                        className="w-full bg-stone-50 border border-stone-200 text-2xl font-bold text-stone-900 focus:outline-none p-1 rounded"
                                     />
                                 ) : (
-                                    <span className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">{localData.statsYears}+</span>
+                                    <span className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">{localData.statsYears}+</span>
                                 )}
-                                <span className="text-[9px] uppercase tracking-[0.3em] text-stone-500 font-black">Años de maestría</span>
+                                <span className="text-[8px] uppercase tracking-[0.2em] text-stone-400 font-bold">Años de maestría</span>
                             </div>
-                            <div className="flex flex-col gap-2">
+                            <div className="flex flex-col gap-1">
                                 {isEditing ? (
                                     <input 
                                         type="number" 
                                         value={localData.statsProjects} 
                                         onChange={(e) => handleUpdate("statsProjects", parseInt(e.target.value))}
-                                        className="w-32 bg-white/20 text-4xl md:text-5xl font-black text-white italic tracking-tighter border-b-2 border-indigo-500 focus:outline-none"
+                                        className="w-full bg-stone-50 border border-stone-200 text-2xl font-bold text-stone-900 focus:outline-none p-1 rounded"
                                     />
                                 ) : (
-                                    <span className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">{localData.statsProjects}+</span>
+                                    <span className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">{localData.statsProjects}+</span>
                                 )}
-                                <span className="text-[9px] uppercase tracking-[0.3em] text-stone-500 font-black">Historias creadas</span>
+                                <span className="text-[8px] uppercase tracking-[0.2em] text-stone-400 font-bold">Historias creadas</span>
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <span className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">100%</span>
-                                <span className="text-[9px] uppercase tracking-[0.3em] text-stone-500 font-black">Satisfacción total</span>
+                            <div className="flex flex-col gap-1">
+                                <span className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">100%</span>
+                                <span className="text-[8px] uppercase tracking-[0.2em] text-stone-400 font-bold">Satisfacción total</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>

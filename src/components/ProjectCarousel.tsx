@@ -151,29 +151,14 @@ export default function ProjectCarousel({ projects, isAdmin, isEditing }: { proj
                             className="min-w-full sm:min-w-[50%] lg:min-w-[33.333333%] snap-start"
                         >
                             <Link href={`/proyectos/${project.id}`} className="block px-3">
-                                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-6 bg-stone-100 group shadow-sm">
+                                <div className="relative aspect-[4/3] rounded-3xl overflow-hidden mb-6 bg-stone-100 group shadow-sm">
                                     <Image
                                         src={project.image}
-                                        className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                                        className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-102"
                                         alt=""
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
-
-                                    <div className="absolute top-4 left-4">
-                                        <span className="bg-white/95 px-3 py-1.5 rounded-md text-[8px] font-black uppercase tracking-widest shadow-md text-stone-900">
-                                            {project.category}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="px-1">
-                                    <h3 className="text-[15px] font-bold tracking-tight text-stone-900 mb-1 line-clamp-1">
-                                        {project.name}
-                                    </h3>
-                                    <p className="text-[9px] font-black tracking-[0.2em] uppercase text-stone-400">
-                                        {project.category}
-                                    </p>
                                 </div>
                             </Link>
                         </motion.div>

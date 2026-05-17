@@ -20,46 +20,77 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
 
     const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
+    const [isScrolled, setIsScrolled] = useState(false);
+
     useEffect(() => {
-        setIsDrawerOpen(false);
+        if (pathname !== "/") {
+            setIsScrolled(true);
+            return;
+        }
+
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+
+        handleScroll();
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, [pathname]);
+
+    const isDarkTheme = pathname === "/" && !isScrolled;
+    const textClass = isDarkTheme ? "text-white" : "text-stone-900";
+    const navLinkClass = (href: string) => {
+        if (pathname === href) {
+            return isDarkTheme ? "text-white font-bold" : "text-stone-900 font-bold";
+        }
+        return isDarkTheme ? "text-white/70 hover:text-white" : "text-stone-500 hover:text-stone-900";
+    };
+    const dotClass = isDarkTheme ? "bg-white" : "bg-stone-900";
+    const logoColor = isDarkTheme ? "#ffffff" : "#1c1917";
+    const buttonClass = isDarkTheme 
+        ? "bg-white hover:bg-stone-100 text-stone-900" 
+        : "bg-stone-900 hover:bg-stone-800 text-white";
 
     return (
         <>
             <motion.header
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                className="sticky top-0 z-[100] bg-white border-b border-stone-100/50"
+                className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+                    isScrolled 
+                        ? "bg-white/95 backdrop-blur-md border-b border-stone-100 shadow-sm py-0" 
+                        : "bg-transparent border-b border-transparent py-3"
+                }`}
             >
                 <div className="flex items-center justify-between h-20 px-8 mx-auto max-w-[1400px]">
                     {/* Mobile Menu Button */}
                     <button onClick={toggleDrawer} className="md:hidden">
-                        <ion-icon name="menu-outline" style={{ fontSize: '28px', color: '#1c1917' }}></ion-icon>
+                        <ion-icon name="menu-outline" style={{ fontSize: '28px', color: logoColor }}></ion-icon>
                     </button>
 
                     {/* Logo */}
                     <div className="flex items-center gap-2">
-                        <ion-icon name="crop-outline" style={{ fontSize: '24px', color: '#1c1917' }}></ion-icon>
-                        <Link href="/" className="text-2xl font-bold tracking-tight text-stone-900">
+                        <ion-icon name="crop-outline" style={{ fontSize: '24px', color: logoColor }}></ion-icon>
+                        <Link href="/" className={`text-2xl font-bold tracking-tight transition-colors duration-300 ${textClass}`}>
                             {localSettings.siteName}.
                         </Link>
                     </div>
 
                     {/* Desktop Center Navigation */}
                     <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2">
-                        <ul className="flex items-center gap-12 text-[11px] font-bold tracking-[0.15em] text-stone-600">
+                        <ul className="flex items-center gap-12 text-[11px] font-bold tracking-[0.15em]">
                             {navLinks.map((link) => (
                                 <li key={link.href} className="relative flex flex-col items-center">
                                     <Link
                                         href={link.href}
-                                        className={`transition-colors hover:text-stone-900 ${pathname === link.href ? "text-stone-900" : ""}`}
+                                        className={`transition-colors duration-300 ${navLinkClass(link.href)}`}
                                     >
                                         {link.name}
                                     </Link>
                                     {pathname === link.href && (
                                         <motion.div
                                             layoutId="navDot"
-                                            className="absolute -bottom-3 w-1 h-1 bg-stone-900 rounded-full"
+                                            className={`absolute -bottom-3 w-1 h-1 rounded-full ${dotClass}`}
                                         />
                                     )}
                                 </li>
@@ -67,23 +98,19 @@ export default function Header({ settings, isAdmin }: { settings?: any, isAdmin?
                         </ul>
                     </nav>
 
-                    {/* Right Navigation */}
-                    <div className="hidden md:flex items-center gap-6 text-[11px] font-bold tracking-[0.1em] text-stone-900">
-                        <button className="hover:opacity-70 transition flex items-center justify-center">
-                            <ion-icon name="search-outline" style={{ fontSize: '20px' }}></ion-icon>
-                        </button>
-                        <button className="hover:opacity-70 transition flex items-center justify-center">
-                            <ion-icon name="cart-outline" style={{ fontSize: '20px' }}></ion-icon>
-                        </button>
-                        <div className="w-px h-4 bg-stone-200 mx-2"></div>
-                        <Link href="/admin" className="hover:text-stone-500 transition">
-                            {isAdmin ? "ADMIN" : "LOGIN"}
-                        </Link>
-                        {!isAdmin && (
-                            <Link href="/contact" className="hover:text-stone-500 transition">
-                                REGISTER
+                    {/* Right Navigation - Clean CTA Button */}
+                    <div className="hidden md:flex items-center gap-4">
+                        {isAdmin && (
+                            <Link href="/admin" className={`text-[10px] font-bold tracking-[0.15em] transition mr-2 ${isDarkTheme ? "text-white/60 hover:text-white" : "text-stone-400 hover:text-stone-900"}`}>
+                                ADMIN
                             </Link>
                         )}
+                        <Link 
+                            href="/contact" 
+                            className={`text-[10px] font-bold tracking-[0.2em] uppercase px-5 py-3 transition-all duration-300 ${buttonClass}`}
+                        >
+                            PRESUPUESTO
+                        </Link>
                     </div>
                 </div>
             </motion.header>

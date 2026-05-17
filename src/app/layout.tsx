@@ -50,9 +50,6 @@ export default async function RootLayout({
             </head>
             <body className={`${geist.variable} font-sans antialiased text-stone-900 bg-stone-50`}>
             <AdminProvider isAdmin={isAdmin}>
-                <div className="bg-stone-900 text-stone-100 py-4 px-6 text-center text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-medium leading-relaxed">
-                    {globalData.navbar?.topBanner || "Presupuestos sin compromiso | Calidad garantizada en toda España"}
-                </div>
                 <Header settings={globalData.navbar} isAdmin={isAdmin} />
                 <main>{children}</main>
                 <Footer settings={globalData.footer} isAdmin={isAdmin} />
