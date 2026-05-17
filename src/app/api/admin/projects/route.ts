@@ -12,7 +12,6 @@ export async function POST(request: Request) {
 
         const { mainImage, galleryUrls, videoUrls, ...strapiData } = await request.json();
         strapiData.publishedAt = new Date().toISOString();
-        strapiData.status = "published";
 
         // Create in Strapi 5
         const response = await fetchStrapi("projects", undefined, {

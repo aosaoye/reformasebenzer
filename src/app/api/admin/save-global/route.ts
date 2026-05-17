@@ -55,8 +55,7 @@ export async function PUT(request: Request) {
 
         // Sync with Strapi single type 'global' so that settings persist in production
         const strapiPayload: any = {
-            publishedAt: new Date().toISOString(),
-            status: "published"
+            publishedAt: new Date().toISOString()
         };
         if (payload.navbar && payload.navbar.siteName) {
             strapiPayload.siteName = payload.navbar.siteName;
